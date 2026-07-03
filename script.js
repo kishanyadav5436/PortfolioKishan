@@ -1,6 +1,8 @@
-// Typing Effect
+// ============================
+// TYPING EFFECT
+// ============================
 const typingText = document.querySelector(".typing");
-const words = ["Kishan Kumar", "a Full-Stack Developer", "an AI Enthusiast", "a MERN Stack Developer", "a Problem Solver", "a Hackathon Winner"];
+const words = ["Kishan Kumar", "a Full-Stack Developer", "an AI Enthusiast", "a Problem Solver"];
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -19,85 +21,192 @@ function type() {
 
     if (!isDeleting && charIndex === currentWord.length) {
         isDeleting = true;
-        setTimeout(type, 2000); // Pause at end of word
+        setTimeout(type, 2500);
     } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         wordIndex = (wordIndex + 1) % words.length;
-        setTimeout(type, 500); // Pause before new word
+        setTimeout(type, 400);
     } else {
-        setTimeout(type, isDeleting ? 50 : 100);
+        setTimeout(type, isDeleting ? 40 : 80);
     }
 }
 
-// Scroll Reveal Animation
-function reveal() {
-    var reveals = document.querySelectorAll(".reveal");
-    for (var i = 0; i < reveals.length; i++) {
-        var windowHeight = window.innerHeight;
-        var elementTop = reveals[i].getBoundingClientRect().top;
-        var elementVisible = 100;
-        
-        if (elementTop < windowHeight - elementVisible) {
-            reveals[i].classList.add("active");
-        }
-    }
+// ============================
+// INTERSECTION OBSERVER REVEAL
+// ============================
+function initRevealObserver() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -80px 0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                // Don't unobserve — allows re-triggering if needed
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
 }
 
-// Mobile Navigation Toggle
-const burger = document.querySelector('.burger');
-const nav = document.querySelector('.nav-links');
-const navLinks = document.querySelectorAll('.nav-links li');
-
-function toggleNav() {
-    if (!burger || !nav) return;
+// ============================
+// ACTIVE NAV LINK ON SCROLL
+// ============================
+function initActiveNav() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
     
-    burger.addEventListener('click', () => {
-        // Toggle Nav
-        nav.classList.toggle('nav-active');
-        
-        // Burger Animation
-        burger.classList.toggle('toggle');
+    if (!sections.length || !navLinks.length) return;
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+}
+
+// ============================
+// NAVBAR SCROLL EFFECT
+// ============================
+function initNavbarScroll() {
+    const navbar = document.getElementById('navbar');
+    if (!navbar) return;
+
+    let lastScroll = 0;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+                lastScroll = window.scrollY;
+                ticking = false;
+            });
+            ticking = true;
+        }
     });
 }
 
-// Close mobile menu when a link is clicked
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        if(nav.classList.contains('nav-active')) {
-            nav.classList.remove('nav-active');
-            burger.classList.remove('toggle');
+// ============================
+// MOBILE NAVIGATION
+// ============================
+function initMobileNav() {
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('nav-links');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    if (!burger || !nav) return;
+
+    burger.addEventListener('click', () => {
+        nav.classList.toggle('nav-active');
+        burger.classList.toggle('toggle');
+        document.body.style.overflow = nav.classList.contains('nav-active') ? 'hidden' : '';
+    });
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (nav.classList.contains('nav-active')) {
+                nav.classList.remove('nav-active');
+                burger.classList.remove('toggle');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+}
+
+// ============================
+// CONTACT FORM VALIDATION
+// ============================
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const message = document.getElementById('message');
+        let valid = true;
+
+        // Simple validation
+        [name, email, message].forEach(field => {
+            if (!field.value.trim()) {
+                field.style.borderColor = 'rgba(255, 80, 80, 0.6)';
+                valid = false;
+            } else {
+                field.style.borderColor = '';
+            }
+        });
+
+        if (email.value && !isValidEmail(email.value)) {
+            email.style.borderColor = 'rgba(255, 80, 80, 0.6)';
+            valid = false;
+        }
+
+        if (valid) {
+            // Show success feedback
+            const btn = form.querySelector('button[type="submit"]');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+            btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.style.background = '';
+                btn.disabled = false;
+                form.reset();
+            }, 3000);
+
+            // Build mailto link as fallback (since formspree placeholder)
+            const subject = document.getElementById('subject')?.value || 'Portfolio Contact';
+            const mailtoLink = `mailto:kishankumar13580@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name.value} (${email.value})\n\n${message.value}`)}`;
+            window.open(mailtoLink, '_blank');
         }
     });
-});
+}
 
-// Navbar background change on scroll
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.padding = '15px 5%';
-        navbar.style.background = 'rgba(10, 10, 10, 0.9)';
-        navbar.style.boxShadow = '0 5px 20px rgba(0,0,0,0.5)';
-    } else {
-        navbar.style.padding = '20px 5%';
-        navbar.style.background = 'rgba(10, 10, 10, 0.6)';
-        navbar.style.boxShadow = 'none';
-    }
-});
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
-// Event Listeners
-window.addEventListener("scroll", reveal);
-document.addEventListener("DOMContentLoaded", () => {
-    type();
-    reveal(); // Initial check
-    toggleNav();
-    initBirdCanvas();
-});
-
-// Neural Network Bird Animation
+// ============================
+// NEURAL NETWORK BRAIN CANVAS
+// ============================
 function initBirdCanvas() {
     const canvas = document.getElementById('bird-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+
+    // Detect mobile for performance optimization
+    const isMobile = window.innerWidth <= 768;
 
     let width, height;
     function resize() {
@@ -109,15 +218,15 @@ function initBirdCanvas() {
     window.addEventListener('resize', resize);
     resize();
 
-    // Define the skeleton of a Mind (Brain profile) (normalized 0 to 1)
+    // Brain skeleton (normalized 0 to 1)
     const segments = [
-        // Outer cortex ridge (Left to right)
+        // Outer cortex ridge
         {x1: 0.25, y1: 0.35}, {x1: 0.35, y1: 0.2}, {x1: 0.5, y1: 0.15}, {x1: 0.65, y1: 0.2}, {x1: 0.75, y1: 0.35},
         {x1: 0.8, y1: 0.5}, {x1: 0.75, y1: 0.7}, {x1: 0.6, y1: 0.75}, {x1: 0.5, y1: 0.65},
         {x1: 0.4, y1: 0.7}, {x1: 0.25, y1: 0.65}, {x1: 0.2, y1: 0.5},
         // Brain stem
         {x1: 0.6, y1: 0.75}, {x1: 0.55, y1: 0.9}, {x1: 0.65, y1: 0.9},
-        // Inner network lines (Sulci)
+        // Inner network (Sulci)
         {x1: 0.35, y1: 0.2}, {x1: 0.45, y1: 0.4}, {x1: 0.5, y1: 0.15}, {x1: 0.5, y1: 0.4},
         {x1: 0.65, y1: 0.2}, {x1: 0.55, y1: 0.4}, {x1: 0.25, y1: 0.35}, {x1: 0.35, y1: 0.5},
         {x1: 0.75, y1: 0.35}, {x1: 0.65, y1: 0.5}, {x1: 0.45, y1: 0.4}, {x1: 0.55, y1: 0.4},
@@ -125,51 +234,44 @@ function initBirdCanvas() {
         {x1: 0.45, y1: 0.6}, {x1: 0.55, y1: 0.6}, {x1: 0.5, y1: 0.4}, {x1: 0.5, y1: 0.65}
     ];
 
-    // Convert the point array into segments
+    // Convert to segments
     const brainSegments = [];
-    // Outer perimeter
-    for(let i=0; i<11; i++) {
+    for (let i = 0; i < 11; i++) {
         brainSegments.push({x1: segments[i].x1, y1: segments[i].y1, x2: segments[i+1].x1, y2: segments[i+1].y1});
     }
-    // Close the loop
     brainSegments.push({x1: segments[11].x1, y1: segments[11].y1, x2: segments[0].x1, y2: segments[0].y1});
-    // Brain stem
     brainSegments.push({x1: segments[12].x1, y1: segments[12].y1, x2: segments[13].x1, y2: segments[13].y1});
     brainSegments.push({x1: segments[12].x1, y1: segments[12].y1, x2: segments[14].x1, y2: segments[14].y1});
-    // Inner network
-    for(let i=15; i<segments.length; i+=2) {
+    for (let i = 15; i < segments.length; i += 2) {
         if (segments[i+1]) {
             brainSegments.push({x1: segments[i].x1, y1: segments[i].y1, x2: segments[i+1].x1, y2: segments[i+1].y1});
         }
     }
 
+    // Generate nodes — reduced on mobile
+    const pointsPerSegment = isMobile ? 18 : 35;
     const baseNodes = [];
-    // Generate nodes along the skeleton
     brainSegments.forEach(seg => {
-        // Increased to 35 points per line segment for VERY high density
-        for (let i = 0; i < 35; i++) {
+        for (let i = 0; i < pointsPerSegment; i++) {
             const t = Math.random();
             baseNodes.push({
-                x: seg.x1 + (seg.x2 - seg.x1) * t + (Math.random() - 0.5) * 0.04, // slight scatter
+                x: seg.x1 + (seg.x2 - seg.x1) * t + (Math.random() - 0.5) * 0.04,
                 y: seg.y1 + (seg.y2 - seg.y1) * t + (Math.random() - 0.5) * 0.04
             });
         }
     });
 
-    // Sort nodes from top to bottom so it builds down like a scanning effect
     baseNodes.sort((a, b) => a.y - b.y);
 
-    // Color palette (RGB arrays for easy alpha manipulation)
-    // Cyan, Blue, Purple, Pink, Neon Pink
+    // Color palette
     const palette = [
-        [0, 242, 254], 
-        [79, 172, 254], 
-        [161, 140, 209], 
-        [251, 194, 235], 
-        [255, 8, 68]
+        [0, 242, 254],    // Cyan
+        [79, 172, 254],   // Blue
+        [161, 140, 209],  // Purple
+        [251, 194, 235],  // Pink
+        [245, 158, 11]    // Amber accent
     ];
 
-    // Add random floating velocities and colors
     const nodes = baseNodes.map(n => ({
         bx: n.x, by: n.y,
         x: n.x, y: n.y,
@@ -182,27 +284,28 @@ function initBirdCanvas() {
     let lastScrollY = window.scrollY;
     let rainSpeedMultiplier = 1;
 
-    // Initialize rain drops
+    // Rain drops — reduced on mobile
+    const rainCount = isMobile ? 60 : 150;
     const rainDrops = [];
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < rainCount; i++) {
         rainDrops.push({
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * width,
+            y: Math.random() * height,
             length: Math.random() * 20 + 10,
             speed: Math.random() * 5 + 3,
-            opacity: Math.random() * 0.5 + 0.1
+            opacity: Math.random() * 0.4 + 0.05
         });
     }
 
     function updateProgress() {
-        const heroHeight = window.innerHeight * 0.5; // Start earlier
+        const heroHeight = window.innerHeight * 0.5;
         const maxScroll = document.body.scrollHeight - window.innerHeight;
         
         const currentScrollY = window.scrollY;
         if (currentScrollY > lastScrollY) {
-            rainSpeedMultiplier = 1; // Scroll down -> fall down
+            rainSpeedMultiplier = 1;
         } else if (currentScrollY < lastScrollY) {
-            rainSpeedMultiplier = -1; // Scroll up -> fall up
+            rainSpeedMultiplier = -1;
         }
         lastScrollY = currentScrollY;
 
@@ -214,8 +317,11 @@ function initBirdCanvas() {
         scrollProgress = Math.max(0, Math.min(1, scrollProgress));
     }
 
-    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('scroll', updateProgress, { passive: true });
     updateProgress();
+
+    // Connection distance — reduced on mobile
+    const connectDist = isMobile ? 0.06 : 0.08;
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
@@ -225,15 +331,12 @@ function initBirdCanvas() {
         rainDrops.forEach(drop => {
             ctx.beginPath();
             ctx.moveTo(drop.x, drop.y);
-            // Draw line extending in the opposite direction of movement to create a trail
             ctx.lineTo(drop.x, drop.y - (drop.length * rainSpeedMultiplier));
             ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
             ctx.stroke();
             
-            // Move drop
             drop.y += drop.speed * rainSpeedMultiplier;
             
-            // Wrap around screen
             if (drop.y > height + drop.length) {
                 drop.y = -drop.length;
                 drop.x = Math.random() * width;
@@ -244,11 +347,9 @@ function initBirdCanvas() {
         });
 
         if (scrollProgress > 0) {
-            // Update node floating positions
             nodes.forEach(n => {
                 n.x += n.vx;
                 n.y += n.vy;
-                // Keep them very close to base position to preserve bird shape
                 if (Math.abs(n.x - n.bx) > 0.01) n.vx *= -1;
                 if (Math.abs(n.y - n.by) > 0.01) n.vy *= -1;
             });
@@ -256,55 +357,52 @@ function initBirdCanvas() {
             const activeNodeCount = Math.floor(nodes.length * scrollProgress);
             const activeNodes = nodes.slice(0, activeNodeCount);
 
-            // Scale drawing to cover the whole screen
             const scaleX = width * 0.9;
             const scaleY = height * 0.9;
             const offsetX = (width - scaleX) / 2;
-            
-            // Add a global "breathing" floating animation to the entire bird
-            const breatheOffset = Math.sin(Date.now() / 1500) * 20; 
+            const breatheOffset = Math.sin(Date.now() / 1500) * 20;
             const offsetY = ((height - scaleY) / 2) + breatheOffset;
 
-            ctx.lineWidth = 0.5; // Even thinner lines for very high density
+            ctx.lineWidth = 0.5;
 
-            // Draw connections (edges)
+            // Draw connections
             for (let i = 0; i < activeNodes.length; i++) {
                 for (let j = i + 1; j < activeNodes.length; j++) {
                     const n1 = activeNodes[i];
                     const n2 = activeNodes[j];
-                    
                     const dx = n1.x - n2.x;
                     const dy = n1.y - n2.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    // Connect if close enough
-                    if (dist < 0.08) {
+                    if (dist < connectDist) {
                         ctx.beginPath();
                         ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
                         ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
-                        // Use n1's color for the line with calculated alpha
-                        const alpha = 0.4 * (1 - dist/0.08);
+                        const alpha = 0.4 * (1 - dist / connectDist);
                         ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
                         ctx.stroke();
                     }
                 }
             }
 
-            // Draw points (nodes)
+            // Draw nodes
             activeNodes.forEach(n => {
+                const px = offsetX + n.x * scaleX;
+                const py = offsetY + n.y * scaleY;
+
                 ctx.beginPath();
-                ctx.arc(offsetX + n.x * scaleX, offsetY + n.y * scaleY, 1.2, 0, Math.PI * 2); 
+                ctx.arc(px, py, 1.2, 0, Math.PI * 2);
                 ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
                 ctx.fill();
-                
-                // Add a pulsating glow animation to each node
-                const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
-                
-                // Glow effect
-                ctx.beginPath();
-                ctx.arc(offsetX + n.x * scaleX, offsetY + n.y * scaleY, Math.max(0, pulseRadius), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.25)`;
-                ctx.fill();
+
+                // Glow
+                if (!isMobile) {
+                    const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
+                    ctx.beginPath();
+                    ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.2)`;
+                    ctx.fill();
+                }
             });
         }
 
@@ -313,3 +411,37 @@ function initBirdCanvas() {
     
     draw();
 }
+
+// ============================
+// SMOOTH SCROLL FOR ANCHOR LINKS
+// ============================
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                const offset = 80;
+                const position = target.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({
+                    top: position,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// ============================
+// INITIALIZE EVERYTHING
+// ============================
+document.addEventListener("DOMContentLoaded", () => {
+    type();
+    initRevealObserver();
+    initActiveNav();
+    initNavbarScroll();
+    initMobileNav();
+    initContactForm();
+    initSmoothScroll();
+    initBirdCanvas();
+});

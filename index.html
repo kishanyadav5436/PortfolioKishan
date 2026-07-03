@@ -3,135 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kishan Kumar | Full-Stack Developer & AI Enthusiast</title>
-    <meta name="description" content="Portfolio of Kishan Kumar — Full-Stack Developer, AI Enthusiast, and B.Tech CSE student specializing in MERN stack, Python, Java, and Generative AI.">
-    <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Kishan Kumar | Full-Stack Developer — Building Apps That Solve Real Problems</title>
+    <meta name="description" content="Kishan Kumar — Full-Stack Developer specializing in MERN stack, AI-driven applications, and premium web experiences. Hackathon winner. Open to opportunities.">
+    <meta name="keywords" content="Kishan Kumar, Full Stack Developer, MERN Stack, React, Node.js, AI, Portfolio, Lucknow">
+    <meta name="author" content="Kishan Kumar">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Neural Network Bird Canvas -->
+    <!-- Neural Network Canvas Background -->
     <canvas id="bird-canvas"></canvas>
 
-    <!-- Background Elements -->
+    <!-- Background Gradient Shapes -->
     <div class="bg-shape shape-1"></div>
     <div class="bg-shape shape-2"></div>
     <div class="bg-shape shape-3"></div>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">Kishan<span>.</span></div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#certifications">Certifications</a></li>
-            <li><a href="#contact">Contact</a></li>
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919236076711?text=Hi%20Kishan!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect." class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">Chat with me</span>
+    </a>
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <a href="#home" class="logo">Kishan<span>.</span></a>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#services" class="nav-link">Services</a></li>
+            <li><a href="#experience" class="nav-link">Experience</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
-        <div class="burger">
+        <div class="burger" id="burger">
             <div class="line1"></div>
             <div class="line2"></div>
             <div class="line3"></div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- ========== HERO SECTION ========== -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <p class="greeting reveal">Welcome to my world</p>
+            <div class="hero-badge reveal">
+                <span class="badge-pulse"></span>
+                Open to Opportunities
+            </div>
             <h1 class="reveal">Hi, I'm <span class="typing-container"><span class="typing"></span><span class="cursor">|</span></span></h1>
-            <p class="role-desc reveal">A dedicated Full-Stack Developer & AI Enthusiast pursuing B.Tech in Computer Science, passionate about building impactful web applications and exploring Generative AI.</p>
+            <p class="hero-tagline reveal">I build web apps that solve real problems — from <span class="text-gradient">hackathon-winning platforms</span> to <span class="text-gradient">AI-driven chatbots</span>.</p>
             
             <div class="social-icons reveal">
-                <a href="https://github.com/kishanyadav5436" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/kishankumar21/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/kishankumar21/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 <a href="mailto:kishankumar13580@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/919236076711" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
             </div>
             
             <div class="hero-buttons reveal">
-                <a href="#contact" class="btn btn-primary">Hire Me</a>
-                <a href="#projects" class="btn btn-secondary">View Work</a>
+                <a href="#contact" class="btn btn-primary">Let's Talk <i class="fas fa-arrow-right"></i></a>
+                <a href="#projects" class="btn btn-secondary"><i class="fas fa-briefcase"></i> View My Work</a>
             </div>
         </div>
         <div class="scroll-indicator">
             <div class="mouse"></div>
+            <span class="scroll-text">Scroll Down</span>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <h2 class="section-title reveal">About Me</h2>
-        <div class="about-container">
-            <div class="about-text glass-card reveal">
-                <div class="objective">
-                    <h3>Objective</h3>
-                    <p>A dedicated and highly motivated Computer Science student seeking a Software Developer role. Committed to leveraging strong foundational knowledge in MERN stack development, Python, Java, and AI/ML technologies to contribute to the growth and success of a reputable organization while solving real-world problems. Currently building AI-driven applications and full-stack web platforms with a focus on premium UI/UX design.</p>
-                </div>
-                
-                <div class="about-grid">
-                    <div class="edu-box">
-                        <h3><i class="fas fa-graduation-cap"></i> Education</h3>
-                        <ul>
-                            <li>
-                                <strong>B.Tech in Computer Science & Engineering</strong>
-                                <span>Babu Banarasi Das University, Lucknow (Pursuing)</span>
-                            </li>
-                            <li>
-                                <strong>Intermediate (Class XII) | 2022</strong>
-                                <span>H R I C Khalilabad (74%)</span>
-                            </li>
-                            <li>
-                                <strong>High School (Class X) | 2020</strong>
-                                <span>Kisan Inter College (80%)</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="other-info">
-                        <div class="info-box">
-                            <h3><i class="fas fa-users"></i> Soft Skills</h3>
-                            <div class="tags">
-                                <span>Teamwork</span>
-                                <span>Communication</span>
-                                <span>Problem Solving</span>
-                                <span>Leadership</span>
-                                <span>Team Management</span>
-                                <span>Quick Learner</span>
-                                <span>Adaptability</span>
-                            </div>
-                        </div>
-                        <div class="info-box mt-4">
-                            <h3><i class="fas fa-language"></i> Languages & Interests</h3>
-                            <p><strong>Languages:</strong> English, Hindi</p>
-                            <p><strong>Interests:</strong> Generative AI & LLMs, Networking, Full-Stack Development, Watching Anime, Reading Novels</p>
-                        </div>
-                        <div class="info-box mt-4">
-                            <h3><i class="fab fa-github"></i> GitHub Stats</h3>
-                            <p><strong>Repositories:</strong> 20+ Public Repos</p>
-                            <p><strong>Tech Focus:</strong> C, Java, Python, JavaScript, TypeScript</p>
-                            <p><strong>Tools:</strong> React, Next.js, Angular, Tailwind CSS, Vercel</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ========== PROJECTS SECTION ========== -->
+    <section id="projects" class="projects">
+        <div class="section-header reveal">
+            <span class="section-label">Portfolio</span>
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-subtitle">Handpicked work that demonstrates real impact and technical depth</p>
         </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="experience">
-        <h2 class="section-title reveal">Experience</h2>
-        <div class="timeline">
-            <div class="timeline-item reveal">
-                <div class="timeline-dot"></div>
-                <div class="glass-card timeline-content">
-                    <div class="timeline-header">
-                        <h3>Kalpathon Hackathon — Full-Stack Developer</h3>
-                        <span class="timeline-date">Apr 2026</span>
+        <div class="project-container">
+            
+            <!-- Project 1: Neighbourhood Service Marketplace -->
+            <div class="project-card glass-card reveal" data-delay="0">
+                <div class="project-image" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);">
+                    <div class="project-image-content">
+                        <i class="fas fa-store"></i>
                     </div>
-                    <p>Built <strong>"Neighbourhood Service Marketplace"</strong> — a full-stack MERN application that connects homeowners with verified local service professionals. Implemented JWT-based authentication, booking system with MongoDB, provider profiles with ratings & reviews, dark/light mode, and a mobile-first glassmorphism UI. Deployed on Vercel.</p>
+                    <span class="project-badge">🏆 Hackathon Winner</span>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>Neighbourhood Service Marketplace</h3>
+                        <span class="project-date">Apr 2026</span>
+                    </div>
+                    <p>Built for <strong>Kalpathon Hackathon</strong> — a marketplace connecting homeowners with verified local service professionals. Features real-time booking, JWT auth, ratings & reviews, and a premium glassmorphism UI that <strong>impressed the judges and won the competition</strong>.</p>
                     <div class="project-tags">
                         <span>React</span>
                         <span>TypeScript</span>
@@ -139,16 +111,281 @@
                         <span>MongoDB</span>
                         <span>Express.js</span>
                     </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436/Parth2.0_KishanKumar" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                        <a href="https://parth2-0-kishan-kumar.vercel.app/" target="_blank" rel="noopener" class="project-link live"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                    </div>
                 </div>
             </div>
-            <div class="timeline-item reveal">
+
+            <!-- Project 2: Inclusivity AI Chatbot -->
+            <div class="project-card glass-card reveal" data-delay="1">
+                <div class="project-image" style="background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);">
+                    <div class="project-image-content">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>Inclusivity AI Chatbot</h3>
+                        <span class="project-date">2025</span>
+                    </div>
+                    <p>AI-driven chatbot promoting social inclusion with <strong>NLP capabilities and multi-language support</strong>. Built with full MERN stack — includes admin panel, secure auth, and a polished dark/light mode UI. Designed to make awareness <strong>accessible to everyone</strong>.</p>
+                    <div class="project-tags">
+                        <span>MERN Stack</span>
+                        <span>NLP</span>
+                        <span>Tailwind CSS</span>
+                        <span>REST API</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436/Chatbot" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3: Banking System -->
+            <div class="project-card glass-card reveal" data-delay="2">
+                <div class="project-image" style="background: linear-gradient(135deg, #0d1117, #161b22, #21262d);">
+                    <div class="project-image-content">
+                        <i class="fas fa-university"></i>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>Banking System</h3>
+                        <span class="project-date">Apr 2026</span>
+                    </div>
+                    <p>Full-featured banking system with <strong>account management, transaction processing, and secure authentication</strong>. Started in Core Java, then evolved into a modern React frontend — demonstrating ability to <strong>modernize legacy systems</strong> into responsive web platforms.</p>
+                    <div class="project-tags">
+                        <span>Java</span>
+                        <span>React</span>
+                        <span>OOP</span>
+                        <span>Core Java</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436/Banking-System-in-Core-Java-master" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4: Dashboard Project -->
+            <div class="project-card glass-card reveal" data-delay="3">
+                <div class="project-image" style="background: linear-gradient(135deg, #1b1b2f, #162447, #1f4068);">
+                    <div class="project-image-content">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>Analytics Dashboard</h3>
+                        <span class="project-date">Apr 2026</span>
+                    </div>
+                    <p>Data visualization dashboard built with Python for <strong>analytics and reporting</strong>. Features interactive charts, data filtering, and a clean responsive interface — turning <strong>complex datasets into actionable insights</strong> with an accessible design.</p>
+                    <div class="project-tags">
+                        <span>Python</span>
+                        <span>Data Visualization</span>
+                        <span>Analytics</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436/Dashboard-Project" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="section-cta reveal">
+            <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-github"></i> View All Projects on GitHub</a>
+        </div>
+    </section>
+
+    <!-- ========== ABOUT SECTION ========== -->
+    <section id="about" class="about">
+        <div class="section-header reveal">
+            <span class="section-label">About Me</span>
+            <h2 class="section-title">Who I Am</h2>
+        </div>
+        <div class="about-container">
+            <div class="about-story glass-card reveal">
+                <div class="about-intro">
+                    <div class="about-avatar">
+                        <div class="avatar-placeholder">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    </div>
+                    <div class="about-text-content">
+                        <h3>Hey, I'm Kishan 👋</h3>
+                        <p>I'm a Computer Science student at <strong>Babu Banarasi Das University, Lucknow</strong>, obsessed with building things that actually work. I started with HTML/CSS, fell in love with React, and now I build full-stack apps with the MERN stack while exploring the world of Generative AI.</p>
+                        <p>I recently <strong>won a hackathon</strong> building a service marketplace — and that rush of solving real problems with code? That's what drives me every day. When I'm not coding, you'll find me watching anime or diving deep into AI research.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-card glass-card reveal" data-delay="0">
+                    <div class="about-card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Education</h3>
+                    <div class="edu-timeline">
+                        <div class="edu-item">
+                            <strong>B.Tech in CSE</strong>
+                            <span>BBD University, Lucknow (Pursuing)</span>
+                        </div>
+                        <div class="edu-item">
+                            <strong>Intermediate — 74%</strong>
+                            <span>H R I C Khalilabad, 2022</span>
+                        </div>
+                        <div class="edu-item">
+                            <strong>High School — 80%</strong>
+                            <span>Kisan Inter College, 2020</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-card glass-card reveal" data-delay="1">
+                    <div class="about-card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Interests</h3>
+                    <div class="tags">
+                        <span>Generative AI</span>
+                        <span>LLMs</span>
+                        <span>Full-Stack Dev</span>
+                        <span>Networking</span>
+                        <span>Anime</span>
+                        <span>Reading Novels</span>
+                    </div>
+                </div>
+                
+                <div class="about-card glass-card reveal" data-delay="2">
+                    <div class="about-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Soft Skills</h3>
+                    <div class="tags">
+                        <span>Teamwork</span>
+                        <span>Problem Solving</span>
+                        <span>Communication</span>
+                        <span>Leadership</span>
+                        <span>Quick Learner</span>
+                        <span>Adaptability</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SERVICES SECTION ========== -->
+    <section id="services" class="services">
+        <div class="section-header reveal">
+            <span class="section-label">What I Do</span>
+            <h2 class="section-title">Services</h2>
+            <p class="section-subtitle">Solutions I deliver — from idea to deployment</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card glass-card reveal" data-delay="0">
+                <div class="service-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3>Full-Stack Web Development</h3>
+                <p>End-to-end web applications using the MERN stack. From database design to polished frontends — I build apps that users love and clients trust.</p>
+                <div class="service-tech">
+                    <span>React</span>
+                    <span>Node.js</span>
+                    <span>MongoDB</span>
+                    <span>Express</span>
+                </div>
+            </div>
+            <div class="service-card glass-card reveal" data-delay="1">
+                <div class="service-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI & Chatbot Integration</h3>
+                <p>Intelligent chatbots and AI-powered features that make your product smarter. NLP, prompt engineering, and LLM integration built into your workflow.</p>
+                <div class="service-tech">
+                    <span>NLP</span>
+                    <span>LLMs</span>
+                    <span>Vertex AI</span>
+                    <span>Python</span>
+                </div>
+            </div>
+            <div class="service-card glass-card reveal" data-delay="2">
+                <div class="service-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>Frontend UI/UX Design</h3>
+                <p>Premium, responsive interfaces that feel alive. Glassmorphism, smooth animations, dark mode — designs that stop scrollers and convert visitors.</p>
+                <div class="service-tech">
+                    <span>React</span>
+                    <span>Next.js</span>
+                    <span>Tailwind</span>
+                    <span>CSS3</span>
+                </div>
+            </div>
+            <div class="service-card glass-card reveal" data-delay="3">
+                <div class="service-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3>API & Backend Architecture</h3>
+                <p>Scalable REST APIs, secure JWT authentication, and robust database architecture. Clean code that's easy to maintain and ready to scale.</p>
+                <div class="service-tech">
+                    <span>REST API</span>
+                    <span>JWT</span>
+                    <span>MongoDB</span>
+                    <span>Express</span>
+                </div>
+            </div>
+        </div>
+        <div class="section-cta reveal">
+            <a href="#contact" class="btn btn-primary">Discuss Your Project <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- ========== EXPERIENCE SECTION ========== -->
+    <section id="experience" class="experience">
+        <div class="section-header reveal">
+            <span class="section-label">Journey</span>
+            <h2 class="section-title">Experience</h2>
+        </div>
+        <div class="timeline">
+            <div class="timeline-item reveal" data-delay="0">
                 <div class="timeline-dot"></div>
                 <div class="glass-card timeline-content">
                     <div class="timeline-header">
-                        <h3>JPMC — Advanced Software Engineering Virtual Experience</h3>
+                        <h3>CodeAlpha — Full Stack Development Intern</h3>
+                        <span class="timeline-date">May 2026 – Jun 2026</span>
+                    </div>
+                    <p>Successfully completed a Full Stack Development Virtual Internship program. Gained hands-on experience by building web applications and applying concepts to practical projects.</p>
+                    <div class="project-tags">
+                        <span>Full Stack Development</span>
+                        <span>Web Development</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item reveal" data-delay="1">
+                <div class="timeline-dot"></div>
+                <div class="glass-card timeline-content">
+                    <div class="timeline-header">
+                        <h3>Kalpathon Hackathon — Full-Stack Developer</h3>
+                        <span class="timeline-date">Apr 2026</span>
+                    </div>
+                    <p>Built <strong>"Neighbourhood Service Marketplace"</strong> — a full-stack MERN platform that won the hackathon. Implemented JWT auth, booking system, provider profiles with ratings, and a premium glassmorphism UI. Deployed on Vercel.</p>
+                    <div class="project-tags">
+                        <span>React</span>
+                        <span>TypeScript</span>
+                        <span>Node.js</span>
+                        <span>MongoDB</span>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-item reveal" data-delay="2">
+                <div class="timeline-dot"></div>
+                <div class="glass-card timeline-content">
+                    <div class="timeline-header">
+                        <h3>JPMC — Advanced Software Engineering</h3>
                         <span class="timeline-date">Aug 2024</span>
                     </div>
-                    <p>Completed the JP Morgan Chase & Co. Advanced Software Engineering Forage program. Worked on real-world financial software engineering tasks including data analysis, software architecture, and building production-grade Java applications.</p>
+                    <p>Completed JP Morgan Chase & Co.'s Advanced Software Engineering virtual program. Built production-grade Java applications, performed financial data analysis, and worked on real-world software architecture challenges.</p>
                     <div class="project-tags">
                         <span>Java</span>
                         <span>Software Engineering</span>
@@ -156,29 +393,14 @@
                     </div>
                 </div>
             </div>
-            <div class="timeline-item reveal">
-                <div class="timeline-dot"></div>
-                <div class="glass-card timeline-content">
-                    <div class="timeline-header">
-                        <h3>E-Commerce Frontend Development</h3>
-                        <span class="timeline-date">2024</span>
-                    </div>
-                    <p>Built an Amazon-style e-commerce frontend with 10+ UI components using HTML and CSS. Implemented responsive design across desktop and mobile views using Flexbox, Grid, and media queries.</p>
-                    <div class="project-tags">
-                        <span>HTML5</span>
-                        <span>CSS3</span>
-                        <span>Responsive Design</span>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item reveal">
+            <div class="timeline-item reveal" data-delay="3">
                 <div class="timeline-dot"></div>
                 <div class="glass-card timeline-content">
                     <div class="timeline-header">
                         <h3>GenAI Prompt Engineering</h3>
                         <span class="timeline-date">2024</span>
                     </div>
-                    <p>Developed a personal GenAI chatbot using prompt engineering, creating 15+ structured prompts for enhanced user interaction. Earned Google Cloud Skill Badge in "Prompt Design in Vertex AI".</p>
+                    <p>Developed a personal GenAI chatbot using prompt engineering with 15+ structured prompts. Earned Google Cloud Skill Badge in <strong>"Prompt Design in Vertex AI"</strong>.</p>
                     <div class="project-tags">
                         <span>Generative AI</span>
                         <span>Prompt Engineering</span>
@@ -189,312 +411,268 @@
         </div>
     </section>
 
-    <!-- Skills Section -->
+    <!-- ========== SKILLS SECTION ========== -->
     <section id="skills" class="skills">
-        <h2 class="section-title reveal">Core Skills</h2>
+        <div class="section-header reveal">
+            <span class="section-label">Tech Stack</span>
+            <h2 class="section-title">Core Skills</h2>
+        </div>
         <div class="skills-grid">
-            <div class="skill-card glass-card reveal">
+            <div class="skill-card glass-card reveal" data-delay="0">
                 <i class="fas fa-code"></i>
                 <h3>Languages</h3>
-                <p>C, Java, Python, JavaScript, TypeScript, HTML5, CSS3</p>
+                <p>JavaScript, TypeScript, Python, Java, C</p>
             </div>
-            <div class="skill-card glass-card reveal">
+            <div class="skill-card glass-card reveal" data-delay="1">
                 <i class="fab fa-react"></i>
                 <h3>Frontend</h3>
-                <p>React, Next.js, Angular, Vite, Tailwind CSS</p>
+                <p>React, Next.js, Angular, Tailwind CSS, Vite</p>
             </div>
-            <div class="skill-card glass-card reveal">
+            <div class="skill-card glass-card reveal" data-delay="2">
                 <i class="fas fa-server"></i>
                 <h3>Backend</h3>
                 <p>Node.js, Express.js, REST APIs, JWT Auth</p>
             </div>
-            <div class="skill-card glass-card reveal">
+            <div class="skill-card glass-card reveal" data-delay="3">
                 <i class="fas fa-database"></i>
                 <h3>Databases</h3>
-                <p>MongoDB, MongoDB Atlas, NoSQL, Mongoose</p>
+                <p>MongoDB, MongoDB Atlas, Mongoose</p>
             </div>
-            <div class="skill-card glass-card reveal">
+            <div class="skill-card glass-card reveal" data-delay="4">
                 <i class="fab fa-git-alt"></i>
                 <h3>DevOps & Tools</h3>
                 <p>Git, GitHub, Vercel, npm, VS Code</p>
             </div>
-            <div class="skill-card glass-card reveal">
+            <div class="skill-card glass-card reveal" data-delay="5">
                 <i class="fas fa-robot"></i>
                 <h3>AI & ML</h3>
-                <p>Generative AI, Prompt Engineering, NLP, LLMs, Vertex AI</p>
-            </div>
-            <div class="skill-card glass-card reveal">
-                <i class="fas fa-paint-brush"></i>
-                <h3>UI/UX Design</h3>
-                <p>Glassmorphism, Responsive Design, Animations, Dark Mode</p>
-            </div>
-            <div class="skill-card glass-card reveal">
-                <i class="fas fa-network-wired"></i>
-                <h3>Networking</h3>
-                <p>Computer Networks, TCP/IP, HTTP/HTTPS, Web Security</p>
+                <p>Generative AI, NLP, LLMs, Vertex AI</p>
             </div>
         </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <h2 class="section-title reveal">Projects</h2>
-        <div class="project-container">
-            
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Neighbourhood Service Marketplace</h3>
-                        <span class="project-date">Apr 2026</span>
+    <!-- ========== TESTIMONIALS SECTION ========== -->
+    <section id="testimonials" class="testimonials">
+        <div class="section-header reveal">
+            <span class="section-label">Social Proof</span>
+            <h2 class="section-title">What People Say</h2>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card glass-card reveal" data-delay="0">
+                <div class="testimonial-quote">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <p>"Kishan's work on the Neighbourhood Service Marketplace was outstanding. His ability to build a full-stack application under hackathon pressure while maintaining clean code and premium UI was impressive."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <i class="fas fa-user"></i>
                     </div>
-                    <p>Full-stack MERN application built for Kalpathon Hackathon. Connects homeowners with verified local service professionals. Features JWT authentication, booking system, provider profiles with ratings & reviews, dark/light mode, and premium glassmorphism UI. Deployed on Vercel.</p>
-                    <div class="project-tags">
-                        <span>React</span>
-                        <span>TypeScript</span>
-                        <span>Node.js</span>
-                        <span>MongoDB</span>
-                        <span>Express.js</span>
-                        <span>Tailwind CSS</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Parth2.0_KishanKumar" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                        <a href="https://parth2-0-kishan-kumar.vercel.app/" target="_blank" class="project-link live"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                    <div class="author-info">
+                        <strong>Hackathon Judge</strong>
+                        <span>Kalpathon 2026</span>
                     </div>
                 </div>
             </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Inclusivity AI Chatbot</h3>
-                        <span class="project-date">2025</span>
+            <div class="testimonial-card glass-card reveal" data-delay="1">
+                <div class="testimonial-quote">
+                    <i class="fas fa-quote-left"></i>
+                </div>
+                <p>"A quick learner who consistently delivers quality work. Kishan has a strong grasp of modern web technologies and brings creative solutions to complex problems. His AI chatbot project showed real innovation."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">
+                        <i class="fas fa-user"></i>
                     </div>
-                    <p>AI-driven chatbot designed to promote social inclusion and awareness. Built with MERN stack and integrated NLP capabilities. Features multi-language support, admin panel for data management, secure authentication, and modern Tailwind CSS-based UI with dark/light mode.</p>
-                    <div class="project-tags">
-                        <span>MERN Stack</span>
-                        <span>NLP</span>
-                        <span>Tailwind CSS</span>
-                        <span>REST API</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Chatbot" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    <div class="author-info">
+                        <strong>Team Collaborator</strong>
+                        <span>University Project</span>
                     </div>
                 </div>
             </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Banking System</h3>
-                        <span class="project-date">Apr 2026</span>
-                    </div>
-                    <p>Full-featured banking system built in Core Java with modern React frontend. Implements account management, transaction processing, user authentication, and a professional-grade glassmorphism dashboard UI. Transitioning from Java Swing to a responsive web platform.</p>
-                    <div class="project-tags">
-                        <span>Java</span>
-                        <span>React</span>
-                        <span>Core Java</span>
-                        <span>OOP</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Banking-System-in-Core-Java-master" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Dashboard Project</h3>
-                        <span class="project-date">Apr 2026</span>
-                    </div>
-                    <p>Data visualization dashboard built with Python for analytics and reporting. Features interactive charts, data filtering, and a clean responsive interface for presenting complex datasets in an accessible way.</p>
-                    <div class="project-tags">
-                        <span>Python</span>
-                        <span>Data Visualization</span>
-                        <span>Analytics</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Dashboard-Project" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Blog Platform</h3>
-                        <span class="project-date">Apr 2026</span>
-                    </div>
-                    <p>A full-featured blogging platform built with Python. Supports creating, editing, and publishing blog posts with a clean and modern user interface. Designed for content creators and tech enthusiasts.</p>
-                    <div class="project-tags">
-                        <span>Python</span>
-                        <span>Web Development</span>
-                        <span>Backend</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/blog" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Angular Todo App</h3>
-                        <span class="project-date">Feb 2026</span>
-                    </div>
-                    <p>Task management application built with Angular and TypeScript. Features CRUD operations, clean component architecture, state management, and a modern responsive design for productivity tracking.</p>
-                    <div class="project-tags">
-                        <span>Angular</span>
-                        <span>TypeScript</span>
-                        <span>SPA</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/AngularBasicTodo" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Amazon Clone</h3>
-                        <span class="project-date">2024</span>
-                    </div>
-                    <p>Developed a responsive e-commerce interface mimicking key features of the Amazon homepage. Built with HTML and CSS, featuring 10+ UI components, responsive layouts with Flexbox & Grid, and pixel-perfect design.</p>
-                    <div class="project-tags">
-                        <span>HTML5</span>
-                        <span>CSS3</span>
-                        <span>Responsive</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Amzone" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>Rock-Paper-Scissors Game</h3>
-                        <span class="project-date">Oct 2024</span>
-                    </div>
-                    <p>Interactive web-based game built with vanilla JavaScript. Features game logic implementation, DOM manipulation, score tracking, and a clean, user-friendly interface with smooth animations.</p>
-                    <div class="project-tags">
-                        <span>JavaScript</span>
-                        <span>DOM</span>
-                        <span>Game Logic</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/RockPaper" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card glass-card reveal">
-                <div class="project-content">
-                    <div class="project-header">
-                        <h3>JPMC Forage — Software Engineering</h3>
-                        <span class="project-date">Aug 2024</span>
-                    </div>
-                    <p>Completed the JP Morgan Chase & Co. Advanced Software Engineering virtual experience program. Built production-grade Java applications, performed data analysis, and worked on financial software architecture.</p>
-                    <div class="project-tags">
-                        <span>Java</span>
-                        <span>Finance</span>
-                        <span>Software Engineering</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/forage-midas" target="_blank" class="project-link"><i class="fab fa-github"></i> Code</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>  
+        </div>
     </section>
 
-    <!-- Certifications Section -->
+    <!-- ========== CERTIFICATIONS SECTION ========== -->
     <section id="certifications" class="certifications">
-        <h2 class="section-title reveal">Certifications</h2>
+        <div class="section-header reveal">
+            <span class="section-label">Credentials</span>
+            <h2 class="section-title">Certifications</h2>
+        </div>
         <div class="cert-grid">
-            <div class="cert-card glass-card reveal">
+            <div class="cert-card glass-card reveal" data-delay="0">
+                <div class="cert-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>Claude 101</h3>
+                    <p class="cert-issuer">Anthropic (Apr 2026)</p>
+                    <p>Foundational knowledge of AI assistants and prompt engineering. Credential ID: 4ocuzqegnzui</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card reveal" data-delay="1">
+                <div class="cert-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>From SQL to MongoDB's Document Model</h3>
+                    <p class="cert-issuer">MongoDB (Jan 2026)</p>
+                    <p>Successfully transitioned knowledge from relational modeling to NoSQL document structures.</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card reveal" data-delay="2">
+                <div class="cert-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>Kalpathon 2.0 Hackathon</h3>
+                    <p class="cert-issuer">BBD University (Apr 2026)</p>
+                    <p>Certificate of Participation in the multiple-tracks coding hackathon organized by Innosphere SOE.</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card reveal" data-delay="3">
                 <div class="cert-icon">
                     <i class="fab fa-google"></i>
                 </div>
                 <div class="cert-content">
                     <h3>Prompt Design in Vertex AI</h3>
                     <p class="cert-issuer">Google Cloud Skill Badge</p>
-                    <p>Proficiency in crafting effective prompts for Large Language Models (LLMs) and working within the Google Cloud AI ecosystem.</p>
+                    <p>Proficiency in crafting effective prompts for LLMs within the Google Cloud AI ecosystem.</p>
                 </div>
             </div>
-            <div class="cert-card glass-card reveal">
+            <div class="cert-card glass-card reveal" data-delay="4">
                 <div class="cert-icon">
-                    <i class="fas fa-university"></i>
+                    <i class="fas fa-building-columns"></i>
                 </div>
                 <div class="cert-content">
-                    <h3>Advanced Software Engineering</h3>
-                    <p class="cert-issuer">JP Morgan Chase & Co. (Forage)</p>
-                    <p>Completed the JPMC Advanced Software Engineering virtual experience program, building financial software solutions with Java.</p>
+                    <h3>Software Engineering Job Simulation</h3>
+                    <p class="cert-issuer">JP Morgan Chase & Co. via Forage (Feb 2026)</p>
+                    <p>Production-grade Java development, financial software architecture, and data analysis.</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card reveal" data-delay="5">
+                <div class="cert-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>Data Analytics Job Simulation</h3>
+                    <p class="cert-issuer">Deloitte via Forage (Feb 2026)</p>
+                    <p>Completed practical tasks in Data Analytics and Forensic Technology.</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card reveal" data-delay="6">
+                <div class="cert-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>Build CRUD APIs with FastAPI</h3>
+                    <p class="cert-issuer">LetsUpgrade & GDG MAD (Aug 2025)</p>
+                    <p>Successfully completed training in building robust CRUD APIs using the FastAPI framework.</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card reveal" data-delay="7">
+                <div class="cert-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>AI Impact Summit 2024 (Pre-Summit)</h3>
+                    <p class="cert-issuer">HCL GUVI (Dec 2023)</p>
+                    <p>Participated in Mission GokiII India, exploring AI concepts, industry-focused learning, and practical understanding.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- ========== CONTACT SECTION ========== -->
     <section id="contact" class="contact">
-        <h2 class="section-title reveal">Get In Touch</h2>
-        <div class="contact-wrapper glass-card reveal">
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
-                    <div>
-                        <h4>Phone</h4>
-                        <p>+91 9236076711</p>
+        <div class="section-header reveal">
+            <span class="section-label">Get In Touch</span>
+            <h2 class="section-title">Let's Work Together</h2>
+            <p class="section-subtitle">Have a project in mind? Let's talk about it.</p>
+        </div>
+        <div class="contact-wrapper reveal">
+            <!-- Contact Info -->
+            <div class="contact-info glass-card">
+                <h3>Contact Information</h3>
+                <p class="contact-info-text">Feel free to reach out through any of these channels. I typically respond within 24 hours.</p>
+                
+                <div class="contact-items">
+                    <div class="contact-item">
+                        <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <a href="https://wa.me/919236076711" target="_blank" rel="noopener">+91 9236076711</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <a href="mailto:kishankumar13580@gmail.com">kishankumar13580@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Lucknow, Uttar Pradesh, India</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon-box"><i class="fab fa-linkedin-in"></i></div>
+                        <div>
+                            <h4>LinkedIn</h4>
+                            <a href="https://linkedin.com/in/kishankumar21/" target="_blank" rel="noopener">kishankumar21</a>
+                        </div>
                     </div>
                 </div>
-                <div class="contact-item">
-                    <div class="icon-box"><i class="fas fa-envelope"></i></div>
-                    <div>
-                        <h4>Email</h4>
-                        <p><a href="mailto:kishankumar13580@gmail.com">kishankumar13580@gmail.com</a></p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                    <div>
-                        <h4>Location</h4>
-                        <p>Lucknow, Uttar Pradesh, India</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="icon-box"><i class="fab fa-github"></i></div>
-                    <div>
-                        <h4>GitHub</h4>
-                        <p><a href="https://github.com/kishanyadav5436" target="_blank">github.com/kishanyadav5436</a></p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="icon-box"><i class="fab fa-linkedin-in"></i></div>
-                    <div>
-                        <h4>LinkedIn</h4>
-                        <p><a href="https://linkedin.com/in/kishankumar21/" target="_blank">linkedin.com/in/kishankumar21</a></p>
-                    </div>
+
+                <div class="contact-quick-actions">
+                    <a href="https://wa.me/919236076711?text=Hi%20Kishan!%20I%20have%20a%20project%20to%20discuss." class="btn btn-whatsapp" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    <a href="mailto:kishankumar13580@gmail.com" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i> Send Email
+                    </a>
                 </div>
             </div>
-            <div class="contact-action">
-                <p>Feel free to reach out for collaborations, opportunities, or just a friendly chat. I'm always open to discussing new projects and ideas.</p>
-                <a href="mailto:kishankumar13580@gmail.com" class="btn btn-primary">Say Hello <i class="fas fa-paper-plane"></i></a>
+
+            <!-- Contact Form -->
+            <div class="contact-form glass-card">
+                <h3>Send a Message</h3>
+                <form id="contact-form" action="https://formspree.io/f/placeholder" method="POST">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project Discussion">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell me about your project..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
             </div>
         </div>
     </section>
 
+    <!-- ========== FOOTER ========== -->
     <footer>
         <div class="footer-content">
-            <div class="logo">Kishan<span>.</span></div>
-            <p>&copy; 2026 Kishan Kumar. All rights reserved.</p>
+            <a href="#home" class="logo">Kishan<span>.</span></a>
+            <p>&copy; 2026 Kishan Kumar. Built with ❤️ in Lucknow.</p>
             <div class="footer-socials">
-                <a href="https://github.com/kishanyadav5436" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/kishankumar21/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                <a href="mailto:kishankumar13580@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/kishankumar21/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://wa.me/919236076711" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="mailto:kishankumar13580@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
     </footer>
