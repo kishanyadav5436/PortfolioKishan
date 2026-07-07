@@ -444,4 +444,64 @@ document.addEventListener("DOMContentLoaded", () => {
     initContactForm();
     initSmoothScroll();
     initBirdCanvas();
+    initProjectFilter();
 });
+
+// ============================
+// PROJECT FILTER TABS
+// ============================
+function initProjectFilter() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    if (!filterBtns.length || !projectCards.length) return;
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active button
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+
+            projectCards.forEach(card => {
+                const categories = card.getAttribute('data-category') || '';
+
+                if (filter === 'all' || categories.includes(filter)) {
+                    card.classList.remove('hidden');
+                    // Trigger reflow for animation
+                    void card.offsetWidth;
+                    card.classList.add('fade-in');
+                    setTimeout(() => card.classList.remove('fade-in'), 500);
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+}
+
+// ============================
+// CERTIFICATIONS SHOW MORE
+// ============================
+function toggleWorkshops() {
+    const extras = document.querySelectorAll('.cert-extra');
+    const btn = document.getElementById('cert-toggle');
+    const icon = document.getElementById('cert-toggle-icon');
+    const isOpen = btn.classList.contains('open');
+
+    extras.forEach(el => {
+        if (isOpen) {
+            el.style.display = 'none';
+        } else {
+            el.style.display = 'flex';
+            void el.offsetWidth;
+            el.style.animation = 'cardFadeIn 0.35s ease forwards';
+        }
+    });
+
+    btn.classList.toggle('open');
+    btn.innerHTML = isOpen
+        ? '<i class="fas fa-chevron-down" id="cert-toggle-icon"></i> Show 2 more'
+        : '<i class="fas fa-chevron-up" id="cert-toggle-icon"></i> Show less';
+}

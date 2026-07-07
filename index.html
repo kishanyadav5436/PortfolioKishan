@@ -88,13 +88,41 @@
             <h2 class="section-title">Featured Projects</h2>
             <p class="section-subtitle">Handpicked work that demonstrates real impact and technical depth</p>
         </div>
+
+        <!-- Project Filter Tabs -->
+        <div class="project-filters reveal">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="mern">MERN Stack</button>
+            <button class="filter-btn" data-filter="ai">AI / ML</button>
+            <button class="filter-btn" data-filter="python">Python</button>
+            <button class="filter-btn" data-filter="java">Java</button>
+        </div>
+
         <div class="project-container">
-            
+
             <!-- Project 1: Neighbourhood Service Marketplace -->
-            <div class="project-card glass-card reveal" data-delay="0">
+            <div class="project-card glass-card reveal" data-delay="0" data-category="mern">
                 <div class="project-image" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);">
+                    <span class="project-status status-live"><i class="fas fa-circle"></i> Live</span>
+                    <span class="project-badge">🏆 Hackathon Winner</span>
                     <div class="project-image-content">
                         <i class="fas fa-store"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-lines">
+                            <div class="preview-line w-80"></div>
+                            <div class="preview-line w-60"></div>
+                            <div class="preview-line w-90"></div>
+                            <div class="preview-line w-50"></div>
+                        </div>
+                        <div class="preview-grid">
+                            <div class="preview-block"></div>
+                            <div class="preview-block"></div>
+                            <div class="preview-block"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="project-content">
@@ -102,7 +130,7 @@
                         <h3>Neighbourhood Service Marketplace</h3>
                         <span class="project-date">Apr 2026</span>
                     </div>
-                    <p>Built for <strong>Kalpathon Hackathon</strong> — a marketplace connecting homeowners with verified local service professionals. Features real-time booking, JWT auth, ratings & reviews, and a premium glassmorphism UI that <strong>impressed the judges and won the competition</strong>.</p>
+                    <p>Built for <strong>Kalpathon Hackathon</strong> — a marketplace connecting homeowners with verified local service professionals. Features real-time booking, JWT auth, ratings &amp; reviews, and a premium glassmorphism UI that <strong>impressed the judges and won the competition</strong>.</p>
                     <div class="project-tags">
                         <span>React</span>
                         <span>TypeScript</span>
@@ -118,10 +146,22 @@
             </div>
 
             <!-- Project 2: Inclusivity AI Chatbot -->
-            <div class="project-card glass-card reveal" data-delay="1">
+            <div class="project-card glass-card reveal" data-delay="1" data-category="ai mern">
                 <div class="project-image" style="background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);">
+                    <span class="project-status status-live"><i class="fas fa-circle"></i> Live</span>
                     <div class="project-image-content">
                         <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-chat">
+                            <div class="chat-bubble left"></div>
+                            <div class="chat-bubble right"></div>
+                            <div class="chat-bubble left short"></div>
+                            <div class="chat-bubble right short"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="project-content">
@@ -129,7 +169,7 @@
                         <h3>Inclusivity AI Chatbot</h3>
                         <span class="project-date">2025</span>
                     </div>
-                    <p>AI-driven chatbot promoting social inclusion with <strong>NLP capabilities and multi-language support</strong>. Built with full MERN stack — includes admin panel, secure auth, and a polished dark/light mode UI. Designed to make awareness <strong>accessible to everyone</strong>.</p>
+                    <p>Rule-based NLP chatbot built to raise awareness about disability rights and social inclusion. Users type queries like <em>"What is the Rights of Persons with Disabilities Act?"</em> and receive plain-language explanations pulled from a structured knowledge base. Built on the MERN stack with <strong>keyword-intent matching, session-aware conversations, and an admin panel</strong> to add new topics without redeploying.</p>
                     <div class="project-tags">
                         <span>MERN Stack</span>
                         <span>NLP</span>
@@ -144,10 +184,21 @@
             </div>
 
             <!-- Project 3: Banking System -->
-            <div class="project-card glass-card reveal" data-delay="2">
+            <div class="project-card glass-card reveal" data-delay="2" data-category="java">
                 <div class="project-image" style="background: linear-gradient(135deg, #0d1117, #161b22, #21262d);">
+                    <span class="project-status status-live"><i class="fas fa-circle"></i> Live</span>
                     <div class="project-image-content">
                         <i class="fas fa-university"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-bank">
+                            <div class="bank-stat"><div class="bank-label"></div><div class="bank-value"></div></div>
+                            <div class="bank-stat"><div class="bank-label"></div><div class="bank-value"></div></div>
+                            <div class="bank-stat"><div class="bank-label"></div><div class="bank-value"></div></div>
+                        </div>
                     </div>
                 </div>
                 <div class="project-content">
@@ -155,24 +206,40 @@
                         <h3>Banking System</h3>
                         <span class="project-date">Apr 2026</span>
                     </div>
-                    <p>Full-featured banking system with <strong>account management, transaction processing, and secure authentication</strong>. Started in Core Java, then evolved into a modern React frontend — demonstrating ability to <strong>modernize legacy systems</strong> into responsive web platforms.</p>
+                    <p>Core Java OOP project implementing account management (savings &amp; current), deposit/withdrawal transactions, and balance inquiry — all persisted via file I/O. Refactored into a <strong>Spring Boot REST API with a React frontend</strong>, replacing the CLI with a browser dashboard. <span class="project-note"><i class="fas fa-info-circle"></i> Backend-only system — authentication required; browse the source code and API structure on GitHub.</span></p>
                     <div class="project-tags">
                         <span>Java</span>
+                        <span>Spring Boot</span>
                         <span>React</span>
                         <span>OOP</span>
-                        <span>Core Java</span>
+                        <span>REST API</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Banking-System-in-Core-Java-master" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                        <a href="https://github.com/kishanyadav5436/Banking-System-in-Core-Java-master" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> View Source</a>
+                        <a href="https://banking-system-in-core-java-master-1.onrender.com/dashboard" target="_blank" rel="noopener" class="project-link live"><i class="fas fa-external-link-alt"></i> Live Demo</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Project 4: Dashboard Project -->
-            <div class="project-card glass-card reveal" data-delay="3">
+            <!-- Project 4: Analytics Dashboard -->
+            <div class="project-card glass-card reveal" data-delay="3" data-category="python">
                 <div class="project-image" style="background: linear-gradient(135deg, #1b1b2f, #162447, #1f4068);">
+                    <span class="project-status status-live"><i class="fas fa-circle"></i> Live</span>
                     <div class="project-image-content">
                         <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-chart">
+                            <div class="chart-bar" style="height: 60%;"></div>
+                            <div class="chart-bar" style="height: 85%;"></div>
+                            <div class="chart-bar" style="height: 45%;"></div>
+                            <div class="chart-bar" style="height: 70%;"></div>
+                            <div class="chart-bar" style="height: 95%;"></div>
+                            <div class="chart-bar" style="height: 55%;"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="project-content">
@@ -180,15 +247,168 @@
                         <h3>Analytics Dashboard</h3>
                         <span class="project-date">Apr 2026</span>
                     </div>
-                    <p>Data visualization dashboard built with Python for <strong>analytics and reporting</strong>. Features interactive charts, data filtering, and a clean responsive interface — turning <strong>complex datasets into actionable insights</strong> with an accessible design.</p>
+                    <p>Django-based analytics dashboard tracking <strong>sales and user-activity metrics</strong> with Chart.js visualisations — bar charts for monthly revenue, line graphs for DAU/WAU trends, and a filterable transaction table. Data is ingested via a CSV pipeline into SQLite, with session-authenticated views protecting each report. <span class="project-note"><i class="fas fa-info-circle"></i> Requires login — see the source code on GitHub for a full walkthrough.</span></p>
                     <div class="project-tags">
                         <span>Python</span>
-                        <span>Data Visualization</span>
-                        <span>Analytics</span>
+                        <span>Django</span>
+                        <span>Chart.js</span>
+                        <span>SQLite</span>
+                        <span>Bootstrap</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://github.com/kishanyadav5436/Dashboard-Project" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
-                        <a href="https://dashboard-project-one-chi.vercel.app/accounts/login/?next=/dashboard/" target="_blank" rel="noopener" class="project-link live"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        <a href="https://github.com/kishanyadav5436/Dashboard-Project" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> View Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 5: TripNest - Travel Platform -->
+            <div class="project-card glass-card reveal" data-delay="4" data-category="mern">
+                <div class="project-image" style="background: linear-gradient(135deg, #0b3d2e, #1a5c42, #0b3d2e);">
+                    <span class="project-status status-dev"><i class="fas fa-circle"></i> Under Development</span>
+                    <div class="project-image-content">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-travel">
+                            <div class="travel-card"></div>
+                            <div class="travel-card"></div>
+                            <div class="travel-card"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>TripNest — Travel Exploration Platform</h3>
+                        <span class="project-date">2026</span>
+                    </div>
+                    <p>A dynamic <strong>travel community hub</strong> for discovering unique destinations, sharing experiences, and reading authentic peer reviews. Features interactive maps, trip planning tools, and real-time collaborative itineraries.</p>
+                    <div class="project-tags">
+                        <span>Node.js</span>
+                        <span>Express.js</span>
+                        <span>MongoDB</span>
+                        <span>Cloudinary</span>
+                        <span>Joi</span>
+                        <span>Passport</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 6: E-Commerce Store -->
+            <div class="project-card glass-card reveal" data-delay="5" data-category="mern">
+                <div class="project-image" style="background: linear-gradient(135deg, #2d1b69, #4a2c8a, #2d1b69);">
+                    <span class="project-status status-dev"><i class="fas fa-circle"></i> Under Development</span>
+                    <div class="project-image-content">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-shop">
+                            <div class="shop-item"></div>
+                            <div class="shop-item"></div>
+                            <div class="shop-item"></div>
+                            <div class="shop-item"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>E-Commerce Store</h3>
+                        <span class="project-date">2026</span>
+                    </div>
+                    <p>Full-stack e-commerce platform with <strong>product catalog, cart management, Razorpay payment integration</strong>, and an admin dashboard for inventory control. Features JWT auth, search with filters, and a mobile-first responsive design.</p>
+                    <div class="project-tags">
+                        <span>React</span>
+                        <span>Node.js</span>
+                        <span>MongoDB</span>
+                        <span>Razorpay</span>
+                        <span>Redux</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 7: Student Management System -->
+            <div class="project-card glass-card reveal" data-delay="6" data-category="java">
+                <div class="project-image" style="background: linear-gradient(135deg, #1a0a2e, #2d1b5a, #1a0a2e);">
+                    <span class="project-status status-completed"><i class="fas fa-circle"></i> Completed</span>
+                    <div class="project-image-content">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-table">
+                            <div class="table-row header-row"><div></div><div></div><div></div></div>
+                            <div class="table-row"><div></div><div></div><div></div></div>
+                            <div class="table-row"><div></div><div></div><div></div></div>
+                            <div class="table-row"><div></div><div></div><div></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>Student Management System</h3>
+                        <span class="project-date">2024</span>
+                    </div>
+                    <p>A robust <strong>CRUD-based student management system</strong> built in Java with full OOP principles. Manages student records, grades, attendance, and generates performance reports. Demonstrates strong <strong>data structures and algorithm</strong> skills.</p>
+                    <div class="project-tags">
+                        <span>Java</span>
+                        <span>OOP</span>
+                        <span>Data Structures</span>
+                        <span>File I/O</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 8: AI Code Reviewer -->
+            <div class="project-card glass-card reveal" data-delay="7" data-category="ai">
+                <div class="project-image" style="background: linear-gradient(135deg, #0a1628, #0d2137, #0a1628);">
+                    <span class="project-status status-dev"><i class="fas fa-circle"></i> Under Development</span>
+                    <div class="project-image-content">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="project-preview">
+                        <div class="preview-bar">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="preview-code">
+                            <div class="code-line"><span class="code-kw"></span><span class="code-var"></span></div>
+                            <div class="code-line indent"><span class="code-fn"></span></div>
+                            <div class="code-line indent"><span class="code-str"></span></div>
+                            <div class="code-line"><span class="code-kw"></span></div>
+                            <div class="code-line indent"><span class="code-fn"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3>AI Code Reviewer</h3>
+                        <span class="project-date">2026</span>
+                    </div>
+                    <p>An intelligent <strong>code review assistant powered by LLMs</strong> (Gemini/GPT) that analyzes code quality, detects bugs, suggests refactors, and explains improvements in plain language. Integrates with GitHub PRs via webhooks.</p>
+                    <div class="project-tags">
+                        <span>Python</span>
+                        <span>Gemini API</span>
+                        <span>FastAPI</span>
+                        <span>LLMs</span>
+                        <span>GitHub API</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/kishanyadav5436" target="_blank" rel="noopener" class="project-link"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
@@ -281,7 +501,7 @@
         <div class="section-header reveal">
             <span class="section-label">What I Do</span>
             <h2 class="section-title">Services</h2>
-            <p class="section-subtitle">Solutions I deliver — from idea to deployment</p>
+            <p class="section-subtitle">What I actually build — tools, stacks, and the kind of problems I solve</p>
         </div>
         <div class="services-grid">
             <div class="service-card glass-card reveal" data-delay="0">
@@ -289,7 +509,7 @@
                     <i class="fas fa-layer-group"></i>
                 </div>
                 <h3>Full-Stack Web Development</h3>
-                <p>End-to-end web applications using the MERN stack. From database design to polished frontends — I build apps that users love and clients trust.</p>
+                <p>End-to-end MERN applications — React frontend, Express/Node.js API, MongoDB with Mongoose, deployed on Vercel or Render. I handle schema design, JWT auth flows, REST endpoint structure, and connecting it all to a working UI.</p>
                 <div class="service-tech">
                     <span>React</span>
                     <span>Node.js</span>
@@ -301,12 +521,12 @@
                 <div class="service-icon">
                     <i class="fas fa-brain"></i>
                 </div>
-                <h3>AI & Chatbot Integration</h3>
-                <p>Intelligent chatbots and AI-powered features that make your product smarter. NLP, prompt engineering, and LLM integration built into your workflow.</p>
+                <h3>AI &amp; Chatbot Integration</h3>
+                <p>Integrating LLMs (Gemini, GPT) into web apps via REST APIs — prompt engineering, structured output parsing, and hooking model responses into existing frontends. Also experience with rule-based NLP chatbots backed by a custom knowledge base and intent-matching logic.</p>
                 <div class="service-tech">
-                    <span>NLP</span>
-                    <span>LLMs</span>
+                    <span>Gemini API</span>
                     <span>Vertex AI</span>
+                    <span>FastAPI</span>
                     <span>Python</span>
                 </div>
             </div>
@@ -314,12 +534,12 @@
                 <div class="service-icon">
                     <i class="fas fa-palette"></i>
                 </div>
-                <h3>Frontend UI/UX Design</h3>
-                <p>Premium, responsive interfaces that feel alive. Glassmorphism, smooth animations, dark mode — designs that stop scrollers and convert visitors.</p>
+                <h3>Frontend &amp; UI Engineering</h3>
+                <p>Component-based UIs in React and Next.js with TypeScript. I write vanilla CSS and Tailwind, handle responsive layouts, dark/light mode toggling, scroll-driven animations with the Intersection Observer API, and Canvas-based visual effects.</p>
                 <div class="service-tech">
                     <span>React</span>
                     <span>Next.js</span>
-                    <span>Tailwind</span>
+                    <span>TypeScript</span>
                     <span>CSS3</span>
                 </div>
             </div>
@@ -327,13 +547,13 @@
                 <div class="service-icon">
                     <i class="fas fa-server"></i>
                 </div>
-                <h3>API & Backend Architecture</h3>
-                <p>Scalable REST APIs, secure JWT authentication, and robust database architecture. Clean code that's easy to maintain and ready to scale.</p>
+                <h3>API &amp; Backend Architecture</h3>
+                <p>Designing REST APIs with Express or FastAPI — route structure, middleware (auth, validation, error handling), MongoDB aggregation pipelines, and Mongoose schema design. Experience migrating Java OOP systems to web-accessible REST services.</p>
                 <div class="service-tech">
                     <span>REST API</span>
-                    <span>JWT</span>
+                    <span>JWT Auth</span>
                     <span>MongoDB</span>
-                    <span>Express</span>
+                    <span>FastAPI</span>
                 </div>
             </div>
         </div>
@@ -498,87 +718,92 @@
             <span class="section-label">Credentials</span>
             <h2 class="section-title">Certifications</h2>
         </div>
-        <div class="cert-grid">
-            <div class="cert-card glass-card reveal" data-delay="0">
-                <div class="cert-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="cert-content">
-                    <h3>Claude 101</h3>
-                    <p class="cert-issuer">Anthropic (Apr 2026)</p>
-                    <p>Foundational knowledge of AI assistants and prompt engineering. Credential ID: 4ocuzqegnzui</p>
-                </div>
-            </div>
-            <div class="cert-card glass-card reveal" data-delay="1">
-                <div class="cert-icon">
-                    <i class="fas fa-database"></i>
-                </div>
-                <div class="cert-content">
-                    <h3>From SQL to MongoDB's Document Model</h3>
-                    <p class="cert-issuer">MongoDB (Jan 2026)</p>
-                    <p>Successfully transitioned knowledge from relational modeling to NoSQL document structures.</p>
-                </div>
-            </div>
-            <div class="cert-card glass-card reveal" data-delay="2">
-                <div class="cert-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="cert-content">
-                    <h3>Kalpathon 2.0 Hackathon</h3>
-                    <p class="cert-issuer">BBD University (Apr 2026)</p>
-                    <p>Certificate of Participation in the multiple-tracks coding hackathon organized by Innosphere SOE.</p>
-                </div>
-            </div>
-            <div class="cert-card glass-card reveal" data-delay="3">
-                <div class="cert-icon">
-                    <i class="fab fa-google"></i>
-                </div>
-                <div class="cert-content">
-                    <h3>Prompt Design in Vertex AI</h3>
-                    <p class="cert-issuer">Google Cloud Skill Badge</p>
-                    <p>Proficiency in crafting effective prompts for LLMs within the Google Cloud AI ecosystem.</p>
-                </div>
-            </div>
-            <div class="cert-card glass-card reveal" data-delay="4">
+
+        <!-- Tier 1: Formal Certifications -->
+        <div class="cert-tier-label reveal">
+            <span class="tier-pill tier-primary"><i class="fas fa-award"></i> Formal Certifications</span>
+        </div>
+        <div class="cert-grid reveal">
+            <div class="cert-card glass-card" data-delay="0">
                 <div class="cert-icon">
                     <i class="fas fa-building-columns"></i>
                 </div>
                 <div class="cert-content">
                     <h3>Software Engineering Job Simulation</h3>
-                    <p class="cert-issuer">JP Morgan Chase & Co. via Forage (Feb 2026)</p>
-                    <p>Production-grade Java development, financial software architecture, and data analysis.</p>
+                    <p class="cert-issuer">JP Morgan Chase &amp; Co. via Forage (Feb 2026)</p>
+                    <p>Production-grade Java development, financial software architecture, and data analysis tasks modelled on real JPMC engineering work.</p>
                 </div>
             </div>
-            <div class="cert-card glass-card reveal" data-delay="5">
+            <div class="cert-card glass-card" data-delay="1">
                 <div class="cert-icon">
                     <i class="fas fa-chart-pie"></i>
                 </div>
                 <div class="cert-content">
                     <h3>Data Analytics Job Simulation</h3>
                     <p class="cert-issuer">Deloitte via Forage (Feb 2026)</p>
-                    <p>Completed practical tasks in Data Analytics and Forensic Technology.</p>
+                    <p>Completed practical tasks in data analytics and forensic technology, including Excel-based analysis and data interpretation exercises.</p>
                 </div>
             </div>
-            <div class="cert-card glass-card reveal" data-delay="6">
+            <div class="cert-card glass-card" data-delay="2">
                 <div class="cert-icon">
-                    <i class="fas fa-server"></i>
+                    <i class="fas fa-database"></i>
                 </div>
+                <div class="cert-content">
+                    <h3>SQL to MongoDB Document Model</h3>
+                    <p class="cert-issuer">MongoDB University (Jan 2026)</p>
+                    <p>Covered document schema design, embedding vs. referencing trade-offs, and query patterns in MongoDB — applied directly in MERN projects.</p>
+                </div>
+            </div>
+            <div class="cert-card glass-card" data-delay="3">
+                <div class="cert-icon">
+                    <i class="fab fa-google"></i>
+                </div>
+                <div class="cert-content">
+                    <h3>Prompt Design in Vertex AI</h3>
+                    <p class="cert-issuer">Google Cloud Skill Badge</p>
+                    <p>Hands-on labs covering zero-shot, few-shot, and chain-of-thought prompting for Gemini models on Google Cloud — skill badge issued on completion.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tier 2: Workshops & Participation -->
+        <div class="cert-tier-label reveal" style="margin-top: 2.5rem;">
+            <span class="tier-pill tier-secondary"><i class="fas fa-bookmark"></i> Workshops &amp; Participation</span>
+        </div>
+        <div class="cert-grid cert-grid-mini reveal" id="workshops-grid">
+            <div class="cert-card cert-card-mini glass-card">
+                <div class="cert-icon cert-icon-mini"><i class="fas fa-server"></i></div>
                 <div class="cert-content">
                     <h3>Build CRUD APIs with FastAPI</h3>
-                    <p class="cert-issuer">LetsUpgrade & GDG MAD (Aug 2025)</p>
-                    <p>Successfully completed training in building robust CRUD APIs using the FastAPI framework.</p>
+                    <p class="cert-issuer">LetsUpgrade &amp; GDG MAD · Aug 2025</p>
                 </div>
             </div>
-            <div class="cert-card glass-card reveal" data-delay="7">
-                <div class="cert-icon">
-                    <i class="fas fa-brain"></i>
-                </div>
+            <div class="cert-card cert-card-mini glass-card">
+                <div class="cert-icon cert-icon-mini"><i class="fas fa-robot"></i></div>
                 <div class="cert-content">
-                    <h3>AI Impact Summit 2024 (Pre-Summit)</h3>
-                    <p class="cert-issuer">HCL GUVI (Dec 2023)</p>
-                    <p>Participated in Mission GokiII India, exploring AI concepts, industry-focused learning, and practical understanding.</p>
+                    <h3>Claude 101</h3>
+                    <p class="cert-issuer">Anthropic · Apr 2026 · ID: 4ocuzqegnzui</p>
                 </div>
             </div>
+            <div class="cert-card cert-card-mini glass-card cert-extra" style="display:none;">
+                <div class="cert-icon cert-icon-mini"><i class="fas fa-code"></i></div>
+                <div class="cert-content">
+                    <h3>Kalpathon 2.0 Hackathon</h3>
+                    <p class="cert-issuer">BBD University · Apr 2026 · Participation</p>
+                </div>
+            </div>
+            <div class="cert-card cert-card-mini glass-card cert-extra" style="display:none;">
+                <div class="cert-icon cert-icon-mini"><i class="fas fa-brain"></i></div>
+                <div class="cert-content">
+                    <h3>AI Impact Summit Pre-Summit</h3>
+                    <p class="cert-issuer">HCL GUVI · Dec 2023 · Attendance</p>
+                </div>
+            </div>
+        </div>
+        <div class="cert-showmore reveal">
+            <button class="cert-toggle-btn" id="cert-toggle" onclick="toggleWorkshops()">
+                <i class="fas fa-chevron-down" id="cert-toggle-icon"></i> Show 2 more
+            </button>
         </div>
     </section>
 
