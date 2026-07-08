@@ -504,6 +504,8 @@ function initLivePreview() {
         const gradient    = card.dataset.gradient    || 'linear-gradient(135deg, #0a0a12, #161b22)';
         const title       = card.dataset.title       || '';
 
+        const imageSrc    = card.dataset.imageSrc    || '';
+
         // Create and insert loader
         const loader = document.createElement('div');
         loader.className = 'preview-loader';
@@ -514,6 +516,8 @@ function initLivePreview() {
             _buildIframe(wrapper, loader, liveUrl, gradient, title, projectIcons);
         } else if (previewType === 'thumbnail' && liveUrl) {
             _buildThumbnail(wrapper, loader, liveUrl, gradient, title, projectIcons);
+        } else if (previewType === 'static' && imageSrc) {
+            _buildStaticImage(wrapper, loader, imageSrc, gradient, title, projectIcons);
         } else {
             _buildGradientFallback(wrapper, loader, gradient, title, projectIcons);
         }
@@ -584,7 +588,29 @@ function _buildThumbnail(wrapper, loader, liveUrl, gradient, title, icons) {
     wrapper.insertBefore(img, loader);
 }
 
-/** Animated gradient fallback with project icon */
+/** Build a static image preview using a local file path */
+function _buildStaticImage(wrapper, loader, imageSrc, gradient, title, icons) {
+    const img = document.createElement('img');
+    img.className = 'preview-thumb';
+    img.setAttribute('loading', 'lazy');
+    img.setAttribute('alt', title + ' screenshot');
+    img.src = imageSrc;
+
+    img.addEventListener('load', () => {
+        loader.classList.add('hidden');
+        setTimeout(() => loader.remove(), 450);
+    });
+
+    img.addEventListener('error', () => {
+        // Local image failed — fall back to gradient
+        img.remove();
+        _buildGradientFallback(wrapper, loader, gradient, title, icons);
+    });
+
+    wrapper.insertBefore(img, loader);
+}
+
+/** Build a beautiful gradient fallback with the project's icon if no image/iframe can load */
 function _buildGradientFallback(wrapper, loader, gradient, title, icons) {
     const fallback = document.createElement('div');
     fallback.className = 'preview-gradient-fallback';
