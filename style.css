@@ -21,7 +21,7 @@
     /* Text */
     --text-white: #f5f5f7;
     --text-gray: #94a3b8;
-    --text-muted: #64748b;
+    --text-muted: #8b9eb5;
     
     /* Typography */
     --font-heading: 'Outfit', sans-serif;
@@ -220,6 +220,24 @@ h1, h2, h3, h4, .logo {
     margin-top: 3rem;
 }
 
+.section-alt {
+    position: relative;
+}
+
+.section-alt::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.015);
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    z-index: -1;
+}
+
 /* ============================
    GLASS CARD
    ============================ */
@@ -255,6 +273,24 @@ h1, h2, h3, h4, .logo {
         0 20px 60px rgba(0, 0, 0, 0.3),
         0 0 40px rgba(var(--primary-rgb), 0.05),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-card-secondary {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s var(--ease-out);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card-secondary:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 /* ============================
@@ -686,6 +722,34 @@ section {
     margin: 0 auto;
     position: relative;
     z-index: 1;
+}
+
+/* ============================
+   ACCESSIBILITY
+   ============================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .glass-card:hover,
+    .glass-card-secondary:hover,
+    .btn:hover,
+    .nav-link:hover,
+    .social-links a:hover {
+        transform: none !important;
+    }
 }
 
 /* Section Divider */
@@ -1960,7 +2024,7 @@ footer {
 .reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s var(--ease-out);
+    transition: all 0.5s var(--ease-out);
 }
 
 .reveal.active {
