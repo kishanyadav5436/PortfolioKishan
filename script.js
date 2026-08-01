@@ -262,13 +262,10 @@ function initBirdCanvas() {
             sx: Math.random(),
             sy: Math.random(),
             // Current render position
-            x: Math.random(),
-            y: Math.random(),
-            // Drift speed for organic floating effect
-            driftX: (Math.random() - 0.5) * 0.0008,
-            driftY: (Math.random() - 0.5) * 0.0008,
+            x: Math.random() * (window.innerWidth || 1000),
+            y: Math.random() * (window.innerHeight || 800),
             seed: Math.random() * Math.PI * 2,
-            size: Math.random() * 1.8 + 1.0,
+            size: Math.random() * 1.8 + 1.8,
             color: palette[Math.floor(Math.random() * palette.length)]
         });
     }
@@ -281,8 +278,7 @@ function initBirdCanvas() {
         const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
         if (totalScroll > 0) {
             // As user scrolls down, targetRatio goes from 0 to 1
-            // Fully built brain around middle/bottom scroll
-            const rawRatio = window.scrollY / (totalScroll * 0.7);
+            const rawRatio = window.scrollY / (totalScroll * 0.6);
             targetRatio = Math.min(1.0, Math.max(0.0, rawRatio));
         } else {
             targetRatio = 0;
@@ -292,7 +288,7 @@ function initBirdCanvas() {
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    const maxConnectDist = isMobile ? 70 : 100;
+    const maxConnectDist = isMobile ? 80 : 120;
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
@@ -303,8 +299,8 @@ function initBirdCanvas() {
         const time = Date.now() * 0.0015;
 
         // Calculate responsive brain scale & centering offsets
-        const brainScaleX = Math.min(width * 0.7, 650);
-        const brainScaleY = Math.min(height * 0.65, 550);
+        const brainScaleX = Math.min(width * 0.75, 700);
+        const brainScaleY = Math.min(height * 0.7, 600);
         const offsetX = (width - brainScaleX) / 2;
         const breatheY = Math.sin(time * 0.8) * 12;
         const offsetY = ((height - brainScaleY) / 2) + breatheY;
@@ -318,19 +314,26 @@ function initBirdCanvas() {
             const floatX = Math.sin(time + p.seed) * floatAmpX;
             const floatY = Math.cos(time + p.seed * 0.7) * floatAmpY;
 
-            // Interpolate between scattered position (sx, sy) and brain target (bx, by)
-            const targetPixelX = (p.sx * (1 - currentRatio) + p.bx * currentRatio) * width + floatX;
-            const targetPixelY = (p.sy * (1 - currentRatio) + p.by * currentRatio) * height + floatY;
+            // Scattered coordinates across screen
+            const scatterX = p.sx * width + floatX;
+            const scatterY = p.sy * height + floatY;
+
+            // Brain coordinates centered in viewport
+            const brainX = offsetX + p.bx * brainScaleX + floatX * 0.3;
+            const brainY = offsetY + p.by * brainScaleY + floatY * 0.3;
+
+            // Interpolate between scattered position and brain target
+            const targetPixelX = (1 - currentRatio) * scatterX + currentRatio * brainX;
+            const targetPixelY = (1 - currentRatio) * scatterY + currentRatio * brainY;
 
             // Soft position updating
-            p.x += (targetPixelX - p.x) * 0.1;
-            p.y += (targetPixelY - p.y) * 0.1;
+            p.x += (targetPixelX - p.x) * 0.12;
+            p.y += (targetPixelY - p.y) * 0.12;
         });
 
         // 2. Draw Synaptic Neural Connections
-        // Connection threshold increases as brain builds
-        const connectThreshold = maxConnectDist * (0.3 + 0.7 * currentRatio);
-        ctx.lineWidth = 0.6;
+        const connectThreshold = maxConnectDist * (0.35 + 0.65 * currentRatio);
+        ctx.lineWidth = 0.8;
 
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
@@ -341,7 +344,7 @@ function initBirdCanvas() {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < connectThreshold) {
-                    const alpha = (1 - dist / connectThreshold) * (0.15 + 0.35 * currentRatio);
+                    const alpha = (1 - dist / connectThreshold) * (0.2 + 0.4 * currentRatio);
                     ctx.beginPath();
                     ctx.moveTo(p1.x, p1.y);
                     ctx.lineTo(p2.x, p2.y);
@@ -355,16 +358,16 @@ function initBirdCanvas() {
         particles.forEach(p => {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            const particleAlpha = 0.5 + 0.5 * currentRatio;
+            const particleAlpha = 0.6 + 0.4 * currentRatio;
             ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${particleAlpha})`;
             ctx.fill();
 
-            // Glow aura on brain nodes when assembling
-            if (!isMobile && currentRatio > 0.2) {
-                const glowRadius = p.size * (2 + Math.sin(time * 2 + p.seed) * 1.2);
+            // Glow aura on brain nodes
+            if (!isMobile) {
+                const glowRadius = p.size * (2.2 + Math.sin(time * 2 + p.seed) * 1.2);
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, Math.max(0.1, glowRadius), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${0.12 * currentRatio})`;
+                ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${0.15 * (0.4 + 0.6 * currentRatio)})`;
                 ctx.fill();
             }
         });

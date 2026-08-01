@@ -103,7 +103,7 @@ img {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
 }
 
@@ -115,7 +115,7 @@ img {
     position: fixed;
     border-radius: 50%;
     filter: blur(120px);
-    z-index: -1;
+    z-index: 0;
     opacity: 0.35;
     pointer-events: none;
 }
@@ -255,6 +255,7 @@ h1, h2, h3, h4, .logo {
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
     position: relative;
     overflow: hidden;
+    z-index: 2;
 }
 
 .glass-card::before {
@@ -286,6 +287,7 @@ h1, h2, h3, h4, .logo {
     transition: all 0.4s var(--ease-out);
     position: relative;
     overflow: hidden;
+    z-index: 2;
 }
 
 .glass-card-secondary:hover {
@@ -318,35 +320,31 @@ h1, h2, h3, h4, .logo {
 .btn::after {
     content: '';
     position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    background: rgba(255, 255, 255, 0.1);
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
 }
 
 .btn:hover::after {
-    opacity: 1;
+    width: 300px;
+    height: 300px;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #000;
-    font-weight: 700;
+    color: #050505;
     box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
 }
 
 .btn-primary:hover {
+    transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(var(--primary-rgb), 0.5);
-    transform: translateY(-3px);
-}
-
-.btn-primary i {
-    transition: transform 0.3s ease;
-}
-
-.btn-primary:hover i {
-    transform: translateX(4px);
+    color: #050505;
 }
 
 .btn-secondary {
@@ -358,20 +356,22 @@ h1, h2, h3, h4, .logo {
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    color: var(--text-white);
 }
 
 .btn-whatsapp {
     background: var(--whatsapp);
-    color: #fff;
-    font-weight: 700;
+    color: #ffffff;
     box-shadow: 0 4px 20px rgba(var(--whatsapp-rgb), 0.3);
 }
 
 .btn-whatsapp:hover {
+    background: #20ba5a;
+    transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(var(--whatsapp-rgb), 0.5);
-    transform: translateY(-3px);
+    color: #ffffff;
 }
 
 .btn-full {
@@ -379,7 +379,7 @@ h1, h2, h3, h4, .logo {
 }
 
 /* ============================
-   FLOATING WHATSAPP
+   FLOATING WHATSAPP BUTTON
    ============================ */
 .whatsapp-float {
     position: fixed;
@@ -387,58 +387,45 @@ h1, h2, h3, h4, .logo {
     right: 30px;
     width: 60px;
     height: 60px;
-    border-radius: 50%;
     background: var(--whatsapp);
-    color: #fff;
+    color: #ffffff;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
+    box-shadow: 0 6px 25px rgba(var(--whatsapp-rgb), 0.4);
     z-index: 999;
-    box-shadow: 0 4px 20px rgba(var(--whatsapp-rgb), 0.4);
     transition: all 0.4s var(--ease-spring);
-    text-decoration: none;
 }
 
 .whatsapp-float:hover {
-    transform: scale(1.1) translateY(-4px);
-    box-shadow: 0 8px 30px rgba(var(--whatsapp-rgb), 0.6);
-}
-
-.whatsapp-float::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    border: 2px solid rgba(var(--whatsapp-rgb), 0.4);
-    animation: whatsapp-pulse 2s ease-in-out infinite;
-}
-
-@keyframes whatsapp-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0; }
+    transform: scale(1.1);
+    box-shadow: 0 10px 35px rgba(var(--whatsapp-rgb), 0.6);
+    color: #ffffff;
 }
 
 .whatsapp-tooltip {
     position: absolute;
-    right: 72px;
-    background: var(--bg-surface);
+    right: 70px;
+    background: rgba(10, 10, 15, 0.9);
     color: var(--text-white);
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 8px;
-    font-size: 0.85rem;
-    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
     white-space: nowrap;
     opacity: 0;
-    pointer-events: none;
-    transform: translateX(10px);
+    visibility: hidden;
     transition: all 0.3s ease;
     border: 1px solid var(--card-border);
+    pointer-events: none;
 }
 
 .whatsapp-float:hover .whatsapp-tooltip {
     opacity: 1;
-    transform: translateX(0);
+    visibility: visible;
+    right: 75px;
 }
 
 /* ============================
@@ -550,9 +537,8 @@ h1, h2, h3, h4, .logo {
     text-align: center;
     padding: 0 20px;
     position: relative;
-    background: radial-gradient(ellipse at 50% 0%, rgba(var(--primary-rgb), 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 50%, rgba(var(--secondary-rgb), 0.05) 0%, transparent 50%),
-                var(--bg-dark);
+    background: radial-gradient(ellipse at 50% 0%, rgba(var(--primary-rgb), 0.12) 0%, transparent 65%),
+                radial-gradient(ellipse at 80% 50%, rgba(var(--secondary-rgb), 0.08) 0%, transparent 55%);
 }
 
 .hero-content {
