@@ -438,30 +438,27 @@ function initSmoothScroll() {
 // ============================
 function initProjectFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card[data-category]');
+    const projectCards = document.querySelectorAll('.project-card');
 
-    if (!filterBtns.length) return;
+    if (!filterBtns.length || !projectCards.length) return;
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Update active button
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             const filter = btn.getAttribute('data-filter');
 
             projectCards.forEach(card => {
-                const category = card.getAttribute('data-category');
-                if (filter === 'all' || category === filter) {
+                const categories = card.getAttribute('data-category') || '';
+
+                if (filter === 'all' || categories.includes(filter)) {
                     card.classList.remove('hidden');
+                    void card.offsetWidth;
                     card.classList.add('fade-in');
-                    // Remove fade-in after animation ends
-                    card.addEventListener('animationend', () => {
-                        card.classList.remove('fade-in');
-                    }, { once: true });
+                    setTimeout(() => card.classList.remove('fade-in'), 500);
                 } else {
                     card.classList.add('hidden');
-                    card.classList.remove('fade-in');
                 }
             });
         });
@@ -481,4 +478,181 @@ document.addEventListener("DOMContentLoaded", () => {
     initSmoothScroll();
     initBirdCanvas();
     initProjectFilters();
+    if (typeof initLivePreview === 'function') initLivePreview();
 });
+
+// ============================
+// LIVE PREVIEW ENGINE
+// ============================
+function initLivePreview() {
+    const IFRAME_TIMEOUT_MS = 5000; // fall back to thumbnail after 5 s
+
+    // Map of project icons used for gradient fallback
+    const projectIcons = {
+        'Neighbourhood Service Marketplace': 'fa-store',
+        'Inclusivity AI Chatbot': 'fa-robot',
+        'Banking System': 'fa-university',
+        'Analytics Dashboard': 'fa-chart-bar',
+        'E-Commerce Store': 'fa-shopping-cart',
+        'Student Management System': 'fa-graduation-cap',
+    };
+
+    document.querySelectorAll('.project-card').forEach(card => {
+        const wrapper   = card.querySelector('.project-preview-wrapper');
+        if (!wrapper) return;
+
+        const previewType = card.dataset.previewType || 'image';
+        const liveUrl     = card.dataset.liveUrl     || '';
+        const gradient    = card.dataset.gradient    || 'linear-gradient(135deg, #0a0a12, #161b22)';
+        const title       = card.dataset.title       || '';
+
+        const imageSrc    = card.dataset.imageSrc    || '';
+
+        // Create and insert loader
+        const loader = document.createElement('div');
+        loader.className = 'preview-loader';
+        loader.innerHTML = '<div class="preview-spinner"></div>';
+        wrapper.insertBefore(loader, wrapper.firstChild);
+
+        if (previewType === 'iframe' && liveUrl) {
+            _buildIframe(wrapper, loader, liveUrl, gradient, title, projectIcons);
+        } else if (previewType === 'thumbnail' && liveUrl) {
+            _buildThumbnail(wrapper, loader, liveUrl, gradient, title, projectIcons);
+        } else if (previewType === 'static' && imageSrc) {
+            _buildStaticImage(wrapper, loader, imageSrc, gradient, title, projectIcons);
+        } else {
+            _buildGradientFallback(wrapper, loader, gradient, title, projectIcons);
+        }
+    });
+}
+
+/** Try an iframe; if it fails to load within timeout, swap to Thum.io thumbnail */
+function _buildIframe(wrapper, loader, liveUrl, gradient, title, icons) {
+    const iframe = document.createElement('iframe');
+    iframe.className = 'preview-iframe';
+    iframe.setAttribute('loading', 'lazy');
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+    iframe.setAttribute('title', title + ' preview');
+    iframe.setAttribute('aria-label', title + ' live preview');
+    wrapper.insertBefore(iframe, loader);
+
+    let loaded = false;
+
+    // Set a timeout — if the iframe hasn't signalled load, assume X-Frame-Options blocked it
+    const timer = setTimeout(() => {
+        if (!loaded) {
+            // Silently swap to Thum.io thumbnail
+            iframe.remove();
+            _buildThumbnail(wrapper, loader, liveUrl, gradient, title, icons);
+        }
+    }, 5000);
+
+    iframe.addEventListener('load', () => {
+        // Page loaded — check if it's a blank/error page (best-effort, cross-origin safe)
+        loaded = true;
+        clearTimeout(timer);
+        // Hide loader
+        loader.classList.add('hidden');
+        setTimeout(() => loader.remove(), 450);
+    });
+
+    iframe.addEventListener('error', () => {
+        loaded = true;
+        clearTimeout(timer);
+        iframe.remove();
+        _buildThumbnail(wrapper, loader, liveUrl, gradient, title, icons);
+    });
+
+    // Actually set src to trigger the load
+    iframe.src = liveUrl;
+}
+
+/** Build a Thum.io screenshot thumbnail; fall back to gradient on image error */
+function _buildThumbnail(wrapper, loader, liveUrl, gradient, title, icons) {
+    const img = document.createElement('img');
+    img.className = 'preview-thumb';
+    img.setAttribute('loading', 'lazy');
+    img.setAttribute('alt', title + ' screenshot');
+    // Thum.io free-tier screenshot: 1280×720 cropped
+    img.src = `https://image.thum.io/get/width/1280/crop/720/noanimate/${encodeURIComponent(liveUrl)}`;
+
+    img.addEventListener('load', () => {
+        loader.classList.add('hidden');
+        setTimeout(() => loader.remove(), 450);
+    });
+
+    img.addEventListener('error', () => {
+        // Thum.io failed — fall back to gradient
+        img.remove();
+        _buildGradientFallback(wrapper, loader, gradient, title, icons);
+    });
+
+    wrapper.insertBefore(img, loader);
+}
+
+/** Build a static image preview using a local file path */
+function _buildStaticImage(wrapper, loader, imageSrc, gradient, title, icons) {
+    const img = document.createElement('img');
+    img.className = 'preview-thumb';
+    img.setAttribute('loading', 'lazy');
+    img.setAttribute('alt', title + ' screenshot');
+    img.src = imageSrc;
+
+    img.addEventListener('load', () => {
+        loader.classList.add('hidden');
+        setTimeout(() => loader.remove(), 450);
+    });
+
+    img.addEventListener('error', () => {
+        // Local image failed — fall back to gradient
+        img.remove();
+        _buildGradientFallback(wrapper, loader, gradient, title, icons);
+    });
+
+    wrapper.insertBefore(img, loader);
+}
+
+/** Build a beautiful gradient fallback with the project's icon if no image/iframe can load */
+function _buildGradientFallback(wrapper, loader, gradient, title, icons) {
+    const fallback = document.createElement('div');
+    fallback.className = 'preview-gradient-fallback';
+    fallback.style.background = gradient;
+
+    const iconClass = icons[title] || 'fa-code';
+    fallback.innerHTML = `
+        <i class="fas ${iconClass}"></i>
+        <span>${title}</span>
+    `;
+
+    wrapper.insertBefore(fallback, loader);
+
+    // No async loading needed — hide loader immediately
+    loader.classList.add('hidden');
+    setTimeout(() => loader.remove(), 450);
+}
+
+// ============================
+// CERTIFICATIONS SHOW MORE
+// ============================
+function toggleWorkshops() {
+    const extras = document.querySelectorAll('.cert-extra');
+    const btn = document.getElementById('cert-toggle');
+    const icon = document.getElementById('cert-toggle-icon');
+    const isOpen = btn.classList.contains('open');
+
+    extras.forEach(el => {
+        if (isOpen) {
+            el.style.display = 'none';
+        } else {
+            el.style.display = 'flex';
+            void el.offsetWidth;
+            el.style.animation = 'cardFadeIn 0.35s ease forwards';
+        }
+    });
+
+    btn.classList.toggle('open');
+    btn.innerHTML = isOpen
+        ? '<i class="fas fa-chevron-down" id="cert-toggle-icon"></i> Show 2 more'
+        : '<i class="fas fa-chevron-up" id="cert-toggle-icon"></i> Show less';
+}
+>>>>>>> origin/main
