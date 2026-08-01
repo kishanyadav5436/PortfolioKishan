@@ -2,7 +2,8 @@
 // TYPING EFFECT
 // ============================
 const typingText = document.querySelector(".typing");
-const words = ["Kishan Kumar", "a Full-Stack Developer", "an AI Enthusiast", "a Problem Solver"];
+const words = ["Kishan Kumar", "a Full-Stack Developer", "an AI/ML Developer", "a Hackathon Winner", "a Problem Solver"];
+
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -433,6 +434,41 @@ function initSmoothScroll() {
 }
 
 // ============================
+// PROJECT CATEGORY FILTERS
+// ============================
+function initProjectFilters() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card[data-category]');
+
+    if (!filterBtns.length) return;
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active button
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+
+            projectCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                if (filter === 'all' || category === filter) {
+                    card.classList.remove('hidden');
+                    card.classList.add('fade-in');
+                    // Remove fade-in after animation ends
+                    card.addEventListener('animationend', () => {
+                        card.classList.remove('fade-in');
+                    }, { once: true });
+                } else {
+                    card.classList.add('hidden');
+                    card.classList.remove('fade-in');
+                }
+            });
+        });
+    });
+}
+
+// ============================
 // INITIALIZE EVERYTHING
 // ============================
 document.addEventListener("DOMContentLoaded", () => {
@@ -444,4 +480,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initContactForm();
     initSmoothScroll();
     initBirdCanvas();
+    initProjectFilters();
 });
