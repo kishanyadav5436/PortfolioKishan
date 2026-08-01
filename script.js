@@ -282,26 +282,26 @@ function initBirdCanvas() {
     }));
 
     // Rain drops — reduced on mobile
-    const rainCount = isMobile ? 60 : 150;
+    const rainCount = isMobile ? 60 : 140;
     const rainDrops = [];
     for (let i = 0; i < rainCount; i++) {
         rainDrops.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            length: Math.random() * 20 + 10,
-            speed: Math.random() * 5 + 3,
-            opacity: Math.random() * 0.4 + 0.05
+            length: Math.random() * 22 + 12,
+            speed: Math.random() * 4 + 2.5,
+            opacity: Math.random() * 0.45 + 0.15
         });
     }
 
-    const connectDist = isMobile ? 0.06 : 0.08;
+    const connectDist = isMobile ? 0.07 : 0.09;
 
     // Draw loop — smooth and continuous, independent of scroll direction
     function draw() {
         ctx.clearRect(0, 0, width, height);
 
         // Draw Rain — flows downwards smoothly
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.6;
         rainDrops.forEach(drop => {
             ctx.beginPath();
             ctx.moveTo(drop.x, drop.y);
@@ -320,18 +320,18 @@ function initBirdCanvas() {
         nodes.forEach(n => {
             n.x += n.vx;
             n.y += n.vy;
-            if (Math.abs(n.x - n.bx) > 0.01) n.vx *= -1;
-            if (Math.abs(n.y - n.by) > 0.01) n.vy *= -1;
+            if (Math.abs(n.x - n.bx) > 0.012) n.vx *= -1;
+            if (Math.abs(n.y - n.by) > 0.012) n.vy *= -1;
         });
 
         const activeNodes = nodes;
-        const scaleX = width * 0.9;
-        const scaleY = height * 0.9;
+        const scaleX = width * 0.95;
+        const scaleY = height * 0.95;
         const offsetX = (width - scaleX) / 2;
-        const breatheOffset = Math.sin(Date.now() / 1500) * 20;
+        const breatheOffset = Math.sin(Date.now() / 1500) * 18;
         const offsetY = ((height - scaleY) / 2) + breatheOffset;
 
-        ctx.lineWidth = 0.5;
+        ctx.lineWidth = 0.6;
 
         // Draw connections
         for (let i = 0; i < activeNodes.length; i++) {
@@ -346,7 +346,7 @@ function initBirdCanvas() {
                     ctx.beginPath();
                     ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
                     ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
-                    const alpha = 0.3 * (1 - dist / connectDist);
+                    const alpha = 0.45 * (1 - dist / connectDist);
                     ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
                     ctx.stroke();
                 }
@@ -359,15 +359,15 @@ function initBirdCanvas() {
             const py = offsetY + n.y * scaleY;
 
             ctx.beginPath();
-            ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
             ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
             ctx.fill();
 
             if (!isMobile) {
-                const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
+                const pulseRadius = 5 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2.5;
                 ctx.beginPath();
                 ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.2)`;
+                ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.25)`;
                 ctx.fill();
             }
         });
