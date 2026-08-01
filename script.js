@@ -2,7 +2,7 @@
 // TYPING EFFECT
 // ============================
 const typingText = document.querySelector(".typing");
-const words = ["Kishan Kumar", "a Full-Stack Developer", "an AI/ML Developer", "a Hackathon Winner", "a Problem Solver"];
+const words = ["an AI/ML Engineer", "a Data Scientist", "a Full-Stack Developer", "a Hackathon Winner", "a Problem Solver"];
 
 let wordIndex = 0;
 let charIndex = 0;
@@ -201,12 +201,14 @@ function isValidEmail(email) {
 // ============================
 // NEURAL NETWORK BRAIN CANVAS
 // ============================
+// ============================
+// DYNAMIC SCROLL-DRIVEN HUMAN BRAIN CANVAS
+// ============================
 function initBirdCanvas() {
     const canvas = document.getElementById('bird-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // Detect mobile for performance optimization
     const isMobile = window.innerWidth <= 768;
 
     let width, height;
@@ -219,192 +221,157 @@ function initBirdCanvas() {
     window.addEventListener('resize', resize);
     resize();
 
-    // Define skeleton of a Mind (Brain profile) (normalized 0 to 1)
-    const segments = [
-        // Outer cortex ridge
-        {x1: 0.25, y1: 0.35}, {x1: 0.35, y1: 0.2}, {x1: 0.5, y1: 0.15}, {x1: 0.65, y1: 0.2}, {x1: 0.75, y1: 0.35},
-        {x1: 0.8, y1: 0.5}, {x1: 0.75, y1: 0.7}, {x1: 0.6, y1: 0.75}, {x1: 0.5, y1: 0.65},
-        {x1: 0.4, y1: 0.7}, {x1: 0.25, y1: 0.65}, {x1: 0.2, y1: 0.5},
-        // Brain stem
-        {x1: 0.6, y1: 0.75}, {x1: 0.55, y1: 0.9}, {x1: 0.65, y1: 0.9},
-        // Inner network lines (Sulci)
-        {x1: 0.35, y1: 0.2}, {x1: 0.45, y1: 0.4}, {x1: 0.5, y1: 0.15}, {x1: 0.5, y1: 0.4},
-        {x1: 0.65, y1: 0.2}, {x1: 0.55, y1: 0.4}, {x1: 0.25, y1: 0.35}, {x1: 0.35, y1: 0.5},
-        {x1: 0.75, y1: 0.35}, {x1: 0.65, y1: 0.5}, {x1: 0.45, y1: 0.4}, {x1: 0.55, y1: 0.4},
-        {x1: 0.35, y1: 0.5}, {x1: 0.45, y1: 0.6}, {x1: 0.65, y1: 0.5}, {x1: 0.55, y1: 0.6},
-        {x1: 0.45, y1: 0.6}, {x1: 0.55, y1: 0.6}, {x1: 0.5, y1: 0.4}, {x1: 0.5, y1: 0.65}
+    // 1. Define Anatomical Human Brain Skeleton contour points (normalized 0 to 1)
+    const brainContour = [
+        // Frontal Lobe & Top Cortex
+        {x: 0.28, y: 0.48}, {x: 0.32, y: 0.35}, {x: 0.38, y: 0.25}, {x: 0.46, y: 0.20},
+        {x: 0.55, y: 0.18}, {x: 0.65, y: 0.22}, {x: 0.74, y: 0.30}, {x: 0.80, y: 0.42},
+        // Occipital & Temporal Lobe Curves
+        {x: 0.82, y: 0.55}, {x: 0.78, y: 0.68}, {x: 0.70, y: 0.76}, {x: 0.60, y: 0.72},
+        {x: 0.52, y: 0.65}, {x: 0.44, y: 0.70}, {x: 0.36, y: 0.68}, {x: 0.28, y: 0.60},
+        // Cerebellum & Brain Stem details
+        {x: 0.68, y: 0.78}, {x: 0.64, y: 0.88}, {x: 0.58, y: 0.88}, {x: 0.56, y: 0.76},
+        // Inner Cortex Sulci / Neural folds
+        {x: 0.42, y: 0.32}, {x: 0.50, y: 0.30}, {x: 0.60, y: 0.32}, {x: 0.68, y: 0.40},
+        {x: 0.36, y: 0.44}, {x: 0.48, y: 0.42}, {x: 0.58, y: 0.45}, {x: 0.72, y: 0.48},
+        {x: 0.40, y: 0.56}, {x: 0.52, y: 0.55}, {x: 0.64, y: 0.58}, {x: 0.48, y: 0.62}
     ];
 
-    const brainSegments = [];
-    for (let i = 0; i < 11; i++) {
-        brainSegments.push({x1: segments[i].x1, y1: segments[i].y1, x2: segments[i+1].x1, y2: segments[i+1].y1});
-    }
-    brainSegments.push({x1: segments[11].x1, y1: segments[11].y1, x2: segments[0].x1, y2: segments[0].y1});
-    brainSegments.push({x1: segments[12].x1, y1: segments[12].y1, x2: segments[13].x1, y2: segments[13].y1});
-    brainSegments.push({x1: segments[12].x1, y1: segments[12].y1, x2: segments[14].x1, y2: segments[14].y1});
-    for (let i = 15; i < segments.length; i += 2) {
-        if (segments[i+1]) {
-            brainSegments.push({x1: segments[i].x1, y1: segments[i].y1, x2: segments[i+1].x1, y2: segments[i+1].y1});
-        }
-    }
-
-    const pointsPerSegment = isMobile ? 18 : 35;
-    const baseNodes = [];
-    brainSegments.forEach(seg => {
-        for (let i = 0; i < pointsPerSegment; i++) {
-            const t = Math.random();
-            baseNodes.push({
-                x: seg.x1 + (seg.x2 - seg.x1) * t + (Math.random() - 0.5) * 0.04,
-                y: seg.y1 + (seg.y2 - seg.y1) * t + (Math.random() - 0.5) * 0.04
-            });
-        }
-    });
-
-    baseNodes.sort((a, b) => a.y - b.y);
-
+    // Generate smooth dense brain node positions around segments
+    const nodeCount = isMobile ? 120 : 260;
     const palette = [
-        [0, 242, 254], 
-        [79, 172, 254], 
-        [161, 140, 209], 
-        [251, 194, 235], 
-        [245, 158, 11]
+        [0, 242, 254],    // Cyan
+        [79, 172, 254],   // Bright Blue
+        [161, 140, 209],  // Purple
+        [245, 158, 11],   // Amber Gold
+        [16, 185, 129]    // Emerald
     ];
 
-    const nodes = baseNodes.map(n => ({
-        bx: n.x, by: n.y,
-        x: n.x, y: n.y,
-        vx: (Math.random() - 0.5) * 0.0005,
-        vy: (Math.random() - 0.5) * 0.0005,
-        color: palette[Math.floor(Math.random() * palette.length)]
-    }));
+    const particles = [];
+    for (let i = 0; i < nodeCount; i++) {
+        // Target brain position (normalized 0 to 1)
+        const targetPoint = brainContour[i % brainContour.length];
+        const jitterX = (Math.random() - 0.5) * 0.08;
+        const jitterY = (Math.random() - 0.5) * 0.08;
 
-    let scrollProgress = 0;
-    let lastScrollY = window.scrollY;
-    let rainSpeedMultiplier = 1;
-
-    const rainCount = isMobile ? 60 : 150;
-    const rainDrops = [];
-    for (let i = 0; i < rainCount; i++) {
-        rainDrops.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            length: Math.random() * 20 + 10,
-            speed: Math.random() * 5 + 3,
-            opacity: Math.random() * 0.4 + 0.1
+        particles.push({
+            // Target coordinates (Brain shape)
+            bx: targetPoint.x + jitterX,
+            by: targetPoint.y + jitterY,
+            // Initial scattered coordinates (Random screen positions)
+            sx: Math.random(),
+            sy: Math.random(),
+            // Current render position
+            x: Math.random(),
+            y: Math.random(),
+            // Drift speed for organic floating effect
+            driftX: (Math.random() - 0.5) * 0.0008,
+            driftY: (Math.random() - 0.5) * 0.0008,
+            seed: Math.random() * Math.PI * 2,
+            size: Math.random() * 1.8 + 1.0,
+            color: palette[Math.floor(Math.random() * palette.length)]
         });
     }
 
-    function updateProgress() {
-        const heroHeight = window.innerHeight * 0.2;
-        const maxScroll = document.body.scrollHeight - window.innerHeight;
-        
-        const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY) {
-            rainSpeedMultiplier = 1;
-        } else if (currentScrollY < lastScrollY) {
-            rainSpeedMultiplier = -1;
-        }
-        lastScrollY = currentScrollY;
+    // Scroll state & smoothing ratio
+    let targetRatio = 0;  // 0 = scattered, 1 = fully built human brain
+    let currentRatio = 0; // Lerped value for smooth 60fps assembly/dissolution
 
-        if (currentScrollY < heroHeight) {
-            // Show ambient nodes right from top
-            scrollProgress = 0.35;
+    function onScroll() {
+        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (totalScroll > 0) {
+            // As user scrolls down, targetRatio goes from 0 to 1
+            // Fully built brain around middle/bottom scroll
+            const rawRatio = window.scrollY / (totalScroll * 0.7);
+            targetRatio = Math.min(1.0, Math.max(0.0, rawRatio));
         } else {
-            scrollProgress = 0.35 + 0.65 * ((currentScrollY - heroHeight) / (maxScroll - heroHeight));
+            targetRatio = 0;
         }
-        scrollProgress = Math.max(0.2, Math.min(1, scrollProgress));
     }
 
-    window.addEventListener('scroll', updateProgress, { passive: true });
-    updateProgress();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-    const connectDist = isMobile ? 0.06 : 0.08;
+    const maxConnectDist = isMobile ? 70 : 100;
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
 
-        // Draw Rain
-        ctx.lineWidth = 1.5;
-        rainDrops.forEach(drop => {
+        // Smoothly interpolate current ratio towards target ratio (lerp)
+        currentRatio += (targetRatio - currentRatio) * 0.06;
+
+        const time = Date.now() * 0.0015;
+
+        // Calculate responsive brain scale & centering offsets
+        const brainScaleX = Math.min(width * 0.7, 650);
+        const brainScaleY = Math.min(height * 0.65, 550);
+        const offsetX = (width - brainScaleX) / 2;
+        const breatheY = Math.sin(time * 0.8) * 12;
+        const offsetY = ((height - brainScaleY) / 2) + breatheY;
+
+        // Update particle positions based on current assembly ratio
+        particles.forEach(p => {
+            p.seed += 0.01;
+            // Float offsets when scattered vs assembled
+            const floatAmpX = (1 - currentRatio * 0.6) * 15;
+            const floatAmpY = (1 - currentRatio * 0.6) * 15;
+            const floatX = Math.sin(time + p.seed) * floatAmpX;
+            const floatY = Math.cos(time + p.seed * 0.7) * floatAmpY;
+
+            // Interpolate between scattered position (sx, sy) and brain target (bx, by)
+            const targetPixelX = (p.sx * (1 - currentRatio) + p.bx * currentRatio) * width + floatX;
+            const targetPixelY = (p.sy * (1 - currentRatio) + p.by * currentRatio) * height + floatY;
+
+            // Soft position updating
+            p.x += (targetPixelX - p.x) * 0.1;
+            p.y += (targetPixelY - p.y) * 0.1;
+        });
+
+        // 2. Draw Synaptic Neural Connections
+        // Connection threshold increases as brain builds
+        const connectThreshold = maxConnectDist * (0.3 + 0.7 * currentRatio);
+        ctx.lineWidth = 0.6;
+
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const p1 = particles[i];
+                const p2 = particles[j];
+                const dx = p1.x - p2.x;
+                const dy = p1.y - p2.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < connectThreshold) {
+                    const alpha = (1 - dist / connectThreshold) * (0.15 + 0.35 * currentRatio);
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = `rgba(${p1.color[0]}, ${p1.color[1]}, ${p1.color[2]}, ${alpha})`;
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // 3. Draw Brain Particles & Glow Pulses
+        particles.forEach(p => {
             ctx.beginPath();
-            ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x, drop.y - (drop.length * rainSpeedMultiplier));
-            ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
-            ctx.stroke();
-            
-            drop.y += drop.speed * rainSpeedMultiplier;
-            
-            if (drop.y > height + drop.length) {
-                drop.y = -drop.length;
-                drop.x = Math.random() * width;
-            } else if (drop.y < -drop.length) {
-                drop.y = height + drop.length;
-                drop.x = Math.random() * width;
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            const particleAlpha = 0.5 + 0.5 * currentRatio;
+            ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${particleAlpha})`;
+            ctx.fill();
+
+            // Glow aura on brain nodes when assembling
+            if (!isMobile && currentRatio > 0.2) {
+                const glowRadius = p.size * (2 + Math.sin(time * 2 + p.seed) * 1.2);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(0.1, glowRadius), 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${0.12 * currentRatio})`;
+                ctx.fill();
             }
         });
 
-        if (scrollProgress > 0) {
-            nodes.forEach(n => {
-                n.x += n.vx;
-                n.y += n.vy;
-                if (Math.abs(n.x - n.bx) > 0.01) n.vx *= -1;
-                if (Math.abs(n.y - n.by) > 0.01) n.vy *= -1;
-            });
-
-            const activeNodeCount = Math.floor(nodes.length * scrollProgress);
-            const activeNodes = nodes.slice(0, activeNodeCount);
-
-            const scaleX = width * 0.9;
-            const scaleY = height * 0.9;
-            const offsetX = (width - scaleX) / 2;
-            const breatheOffset = Math.sin(Date.now() / 1500) * 20;
-            const offsetY = ((height - scaleY) / 2) + breatheOffset;
-
-            ctx.lineWidth = 0.5;
-
-            // Draw connections
-            for (let i = 0; i < activeNodes.length; i++) {
-                for (let j = i + 1; j < activeNodes.length; j++) {
-                    const n1 = activeNodes[i];
-                    const n2 = activeNodes[j];
-                    const dx = n1.x - n2.x;
-                    const dy = n1.y - n2.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < connectDist) {
-                        ctx.beginPath();
-                        ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
-                        ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
-                        const alpha = 0.4 * (1 - dist / connectDist);
-                        ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            // Draw nodes
-            activeNodes.forEach(n => {
-                const px = offsetX + n.x * scaleX;
-                const py = offsetY + n.y * scaleY;
-
-                ctx.beginPath();
-                ctx.arc(px, py, 1.3, 0, Math.PI * 2);
-                ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
-                ctx.fill();
-
-                if (!isMobile) {
-                    const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
-                    ctx.beginPath();
-                    ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.2)`;
-                    ctx.fill();
-                }
-            });
-        }
-
         requestAnimationFrame(draw);
     }
-    
+
     draw();
 }
 
