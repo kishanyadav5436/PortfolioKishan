@@ -281,10 +281,6 @@ function initBirdCanvas() {
         color: palette[Math.floor(Math.random() * palette.length)]
     }));
 
-    let scrollProgress = 0;
-    let lastScrollY = window.scrollY;
-    let rainSpeedMultiplier = 1;
-
     // Rain drops — reduced on mobile
     const rainCount = isMobile ? 60 : 150;
     const rainDrops = [];
@@ -298,114 +294,83 @@ function initBirdCanvas() {
         });
     }
 
-    function updateProgress() {
-        const heroHeight = window.innerHeight * 0.5;
-        const maxScroll = document.body.scrollHeight - window.innerHeight;
-        
-        const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY) {
-            rainSpeedMultiplier = 1;
-        } else if (currentScrollY < lastScrollY) {
-            rainSpeedMultiplier = -1;
-        }
-        lastScrollY = currentScrollY;
-
-        if (currentScrollY < heroHeight) {
-            scrollProgress = 0;
-        } else {
-            scrollProgress = (currentScrollY - heroHeight) / (maxScroll - heroHeight);
-        }
-        scrollProgress = Math.max(0, Math.min(1, scrollProgress));
-    }
-
-    window.addEventListener('scroll', updateProgress, { passive: true });
-    updateProgress();
-
-    // Connection distance — reduced on mobile
     const connectDist = isMobile ? 0.06 : 0.08;
 
+    // Draw loop — smooth and continuous, independent of scroll direction
     function draw() {
         ctx.clearRect(0, 0, width, height);
 
-        // Draw Rain
+        // Draw Rain — flows downwards smoothly
         ctx.lineWidth = 1.5;
         rainDrops.forEach(drop => {
             ctx.beginPath();
             ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x, drop.y - (drop.length * rainSpeedMultiplier));
+            ctx.lineTo(drop.x, drop.y - drop.length);
             ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
             ctx.stroke();
             
-            drop.y += drop.speed * rainSpeedMultiplier;
-            
+            drop.y += drop.speed;
             if (drop.y > height + drop.length) {
                 drop.y = -drop.length;
-                drop.x = Math.random() * width;
-            } else if (drop.y < -drop.length) {
-                drop.y = height + drop.length;
                 drop.x = Math.random() * width;
             }
         });
 
-        if (scrollProgress > 0) {
-            nodes.forEach(n => {
-                n.x += n.vx;
-                n.y += n.vy;
-                if (Math.abs(n.x - n.bx) > 0.01) n.vx *= -1;
-                if (Math.abs(n.y - n.by) > 0.01) n.vy *= -1;
-            });
+        // Floating ambient nodes
+        nodes.forEach(n => {
+            n.x += n.vx;
+            n.y += n.vy;
+            if (Math.abs(n.x - n.bx) > 0.01) n.vx *= -1;
+            if (Math.abs(n.y - n.by) > 0.01) n.vy *= -1;
+        });
 
-            const activeNodeCount = Math.floor(nodes.length * scrollProgress);
-            const activeNodes = nodes.slice(0, activeNodeCount);
+        const activeNodes = nodes;
+        const scaleX = width * 0.9;
+        const scaleY = height * 0.9;
+        const offsetX = (width - scaleX) / 2;
+        const breatheOffset = Math.sin(Date.now() / 1500) * 20;
+        const offsetY = ((height - scaleY) / 2) + breatheOffset;
 
-            const scaleX = width * 0.9;
-            const scaleY = height * 0.9;
-            const offsetX = (width - scaleX) / 2;
-            const breatheOffset = Math.sin(Date.now() / 1500) * 20;
-            const offsetY = ((height - scaleY) / 2) + breatheOffset;
+        ctx.lineWidth = 0.5;
 
-            ctx.lineWidth = 0.5;
+        // Draw connections
+        for (let i = 0; i < activeNodes.length; i++) {
+            for (let j = i + 1; j < activeNodes.length; j++) {
+                const n1 = activeNodes[i];
+                const n2 = activeNodes[j];
+                const dx = n1.x - n2.x;
+                const dy = n1.y - n2.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
 
-            // Draw connections
-            for (let i = 0; i < activeNodes.length; i++) {
-                for (let j = i + 1; j < activeNodes.length; j++) {
-                    const n1 = activeNodes[i];
-                    const n2 = activeNodes[j];
-                    const dx = n1.x - n2.x;
-                    const dy = n1.y - n2.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < connectDist) {
-                        ctx.beginPath();
-                        ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
-                        ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
-                        const alpha = 0.4 * (1 - dist / connectDist);
-                        ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
-                        ctx.stroke();
-                    }
+                if (dist < connectDist) {
+                    ctx.beginPath();
+                    ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
+                    ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
+                    const alpha = 0.3 * (1 - dist / connectDist);
+                    ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
+                    ctx.stroke();
                 }
             }
-
-            // Draw nodes
-            activeNodes.forEach(n => {
-                const px = offsetX + n.x * scaleX;
-                const py = offsetY + n.y * scaleY;
-
-                ctx.beginPath();
-                ctx.arc(px, py, 1.2, 0, Math.PI * 2);
-                ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
-                ctx.fill();
-
-                // Glow
-                if (!isMobile) {
-                    const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
-                    ctx.beginPath();
-                    ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.2)`;
-                    ctx.fill();
-                }
-            });
         }
+
+        // Draw nodes
+        activeNodes.forEach(n => {
+            const px = offsetX + n.x * scaleX;
+            const py = offsetY + n.y * scaleY;
+
+            ctx.beginPath();
+            ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+            ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
+            ctx.fill();
+
+            if (!isMobile) {
+                const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
+                ctx.beginPath();
+                ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.2)`;
+                ctx.fill();
+            }
+        });
 
         requestAnimationFrame(draw);
     }
