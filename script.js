@@ -219,7 +219,7 @@ function initBirdCanvas() {
     window.addEventListener('resize', resize);
     resize();
 
-    // Brain skeleton (normalized 0 to 1)
+    // Define skeleton of a Mind (Brain profile) (normalized 0 to 1)
     const segments = [
         // Outer cortex ridge
         {x1: 0.25, y1: 0.35}, {x1: 0.35, y1: 0.2}, {x1: 0.5, y1: 0.15}, {x1: 0.65, y1: 0.2}, {x1: 0.75, y1: 0.35},
@@ -227,7 +227,7 @@ function initBirdCanvas() {
         {x1: 0.4, y1: 0.7}, {x1: 0.25, y1: 0.65}, {x1: 0.2, y1: 0.5},
         // Brain stem
         {x1: 0.6, y1: 0.75}, {x1: 0.55, y1: 0.9}, {x1: 0.65, y1: 0.9},
-        // Inner network (Sulci)
+        // Inner network lines (Sulci)
         {x1: 0.35, y1: 0.2}, {x1: 0.45, y1: 0.4}, {x1: 0.5, y1: 0.15}, {x1: 0.5, y1: 0.4},
         {x1: 0.65, y1: 0.2}, {x1: 0.55, y1: 0.4}, {x1: 0.25, y1: 0.35}, {x1: 0.35, y1: 0.5},
         {x1: 0.75, y1: 0.35}, {x1: 0.65, y1: 0.5}, {x1: 0.45, y1: 0.4}, {x1: 0.55, y1: 0.4},
@@ -235,7 +235,6 @@ function initBirdCanvas() {
         {x1: 0.45, y1: 0.6}, {x1: 0.55, y1: 0.6}, {x1: 0.5, y1: 0.4}, {x1: 0.5, y1: 0.65}
     ];
 
-    // Convert to segments
     const brainSegments = [];
     for (let i = 0; i < 11; i++) {
         brainSegments.push({x1: segments[i].x1, y1: segments[i].y1, x2: segments[i+1].x1, y2: segments[i+1].y1});
@@ -249,7 +248,6 @@ function initBirdCanvas() {
         }
     }
 
-    // Generate nodes — reduced on mobile
     const pointsPerSegment = isMobile ? 18 : 35;
     const baseNodes = [];
     brainSegments.forEach(seg => {
@@ -264,13 +262,12 @@ function initBirdCanvas() {
 
     baseNodes.sort((a, b) => a.y - b.y);
 
-    // Color palette
     const palette = [
-        [0, 242, 254],    // Cyan
-        [79, 172, 254],   // Blue
-        [161, 140, 209],  // Purple
-        [251, 194, 235],  // Pink
-        [245, 158, 11]    // Amber accent
+        [0, 242, 254], 
+        [79, 172, 254], 
+        [161, 140, 209], 
+        [251, 194, 235], 
+        [245, 158, 11]
     ];
 
     const nodes = baseNodes.map(n => ({
@@ -281,96 +278,129 @@ function initBirdCanvas() {
         color: palette[Math.floor(Math.random() * palette.length)]
     }));
 
-    // Rain drops — reduced on mobile
-    const rainCount = isMobile ? 60 : 140;
+    let scrollProgress = 0;
+    let lastScrollY = window.scrollY;
+    let rainSpeedMultiplier = 1;
+
+    const rainCount = isMobile ? 60 : 150;
     const rainDrops = [];
     for (let i = 0; i < rainCount; i++) {
         rainDrops.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            length: Math.random() * 22 + 12,
-            speed: Math.random() * 4 + 2.5,
-            opacity: Math.random() * 0.45 + 0.15
+            length: Math.random() * 20 + 10,
+            speed: Math.random() * 5 + 3,
+            opacity: Math.random() * 0.4 + 0.1
         });
     }
 
-    const connectDist = isMobile ? 0.07 : 0.09;
+    function updateProgress() {
+        const heroHeight = window.innerHeight * 0.2;
+        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > lastScrollY) {
+            rainSpeedMultiplier = 1;
+        } else if (currentScrollY < lastScrollY) {
+            rainSpeedMultiplier = -1;
+        }
+        lastScrollY = currentScrollY;
 
-    // Draw loop — smooth and continuous, independent of scroll direction
+        if (currentScrollY < heroHeight) {
+            // Show ambient nodes right from top
+            scrollProgress = 0.35;
+        } else {
+            scrollProgress = 0.35 + 0.65 * ((currentScrollY - heroHeight) / (maxScroll - heroHeight));
+        }
+        scrollProgress = Math.max(0.2, Math.min(1, scrollProgress));
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    const connectDist = isMobile ? 0.06 : 0.08;
+
     function draw() {
         ctx.clearRect(0, 0, width, height);
 
-        // Draw Rain — flows downwards smoothly
-        ctx.lineWidth = 1.6;
+        // Draw Rain
+        ctx.lineWidth = 1.5;
         rainDrops.forEach(drop => {
             ctx.beginPath();
             ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x, drop.y - drop.length);
+            ctx.lineTo(drop.x, drop.y - (drop.length * rainSpeedMultiplier));
             ctx.strokeStyle = `rgba(0, 242, 254, ${drop.opacity})`;
             ctx.stroke();
             
-            drop.y += drop.speed;
+            drop.y += drop.speed * rainSpeedMultiplier;
+            
             if (drop.y > height + drop.length) {
                 drop.y = -drop.length;
+                drop.x = Math.random() * width;
+            } else if (drop.y < -drop.length) {
+                drop.y = height + drop.length;
                 drop.x = Math.random() * width;
             }
         });
 
-        // Floating ambient nodes
-        nodes.forEach(n => {
-            n.x += n.vx;
-            n.y += n.vy;
-            if (Math.abs(n.x - n.bx) > 0.012) n.vx *= -1;
-            if (Math.abs(n.y - n.by) > 0.012) n.vy *= -1;
-        });
+        if (scrollProgress > 0) {
+            nodes.forEach(n => {
+                n.x += n.vx;
+                n.y += n.vy;
+                if (Math.abs(n.x - n.bx) > 0.01) n.vx *= -1;
+                if (Math.abs(n.y - n.by) > 0.01) n.vy *= -1;
+            });
 
-        const activeNodes = nodes;
-        const scaleX = width * 0.95;
-        const scaleY = height * 0.95;
-        const offsetX = (width - scaleX) / 2;
-        const breatheOffset = Math.sin(Date.now() / 1500) * 18;
-        const offsetY = ((height - scaleY) / 2) + breatheOffset;
+            const activeNodeCount = Math.floor(nodes.length * scrollProgress);
+            const activeNodes = nodes.slice(0, activeNodeCount);
 
-        ctx.lineWidth = 0.6;
+            const scaleX = width * 0.9;
+            const scaleY = height * 0.9;
+            const offsetX = (width - scaleX) / 2;
+            const breatheOffset = Math.sin(Date.now() / 1500) * 20;
+            const offsetY = ((height - scaleY) / 2) + breatheOffset;
 
-        // Draw connections
-        for (let i = 0; i < activeNodes.length; i++) {
-            for (let j = i + 1; j < activeNodes.length; j++) {
-                const n1 = activeNodes[i];
-                const n2 = activeNodes[j];
-                const dx = n1.x - n2.x;
-                const dy = n1.y - n2.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+            ctx.lineWidth = 0.5;
 
-                if (dist < connectDist) {
-                    ctx.beginPath();
-                    ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
-                    ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
-                    const alpha = 0.45 * (1 - dist / connectDist);
-                    ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
-                    ctx.stroke();
+            // Draw connections
+            for (let i = 0; i < activeNodes.length; i++) {
+                for (let j = i + 1; j < activeNodes.length; j++) {
+                    const n1 = activeNodes[i];
+                    const n2 = activeNodes[j];
+                    const dx = n1.x - n2.x;
+                    const dy = n1.y - n2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < connectDist) {
+                        ctx.beginPath();
+                        ctx.moveTo(offsetX + n1.x * scaleX, offsetY + n1.y * scaleY);
+                        ctx.lineTo(offsetX + n2.x * scaleX, offsetY + n2.y * scaleY);
+                        const alpha = 0.4 * (1 - dist / connectDist);
+                        ctx.strokeStyle = `rgba(${n1.color[0]}, ${n1.color[1]}, ${n1.color[2]}, ${alpha})`;
+                        ctx.stroke();
+                    }
                 }
             }
-        }
 
-        // Draw nodes
-        activeNodes.forEach(n => {
-            const px = offsetX + n.x * scaleX;
-            const py = offsetY + n.y * scaleY;
+            // Draw nodes
+            activeNodes.forEach(n => {
+                const px = offsetX + n.x * scaleX;
+                const py = offsetY + n.y * scaleY;
 
-            ctx.beginPath();
-            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
-            ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
-            ctx.fill();
-
-            if (!isMobile) {
-                const pulseRadius = 5 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2.5;
                 ctx.beginPath();
-                ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.25)`;
+                ctx.arc(px, py, 1.3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgb(${n.color[0]}, ${n.color[1]}, ${n.color[2]})`;
                 ctx.fill();
-            }
-        });
+
+                if (!isMobile) {
+                    const pulseRadius = 4 + Math.sin((Date.now() / 200) + (n.x * 20)) * 2;
+                    ctx.beginPath();
+                    ctx.arc(px, py, Math.max(0, pulseRadius), 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0.2)`;
+                    ctx.fill();
+                }
+            });
+        }
 
         requestAnimationFrame(draw);
     }
