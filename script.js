@@ -271,18 +271,19 @@ function initBirdCanvas() {
     }
 
     // Scroll state & smoothing ratio
-    let targetRatio = 0;  // 0 = scattered, 1 = fully built human brain
-    let currentRatio = 0; // Lerped value for smooth 60fps assembly/dissolution
+    let targetRatio = 0;  // 0 = scattered ambient particles, 1 = fully assembled human brain
+    let currentRatio = 0; // Lerped value for smooth 60fps assembly & dissolution
 
     function onScroll() {
-        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-        if (totalScroll > 0) {
-            // As user scrolls down, targetRatio goes from 0 to 1
-            const rawRatio = window.scrollY / (totalScroll * 0.6);
-            targetRatio = Math.min(1.0, Math.max(0.0, rawRatio));
-        } else {
-            targetRatio = 0;
-        }
+        const currentScroll = window.scrollY;
+        // As user scrolls down from hero (0px) into Projects & Case Studies (~1400px):
+        // 0px => targetRatio = 0.0 (particles scattered across screen)
+        // 700px => targetRatio = 0.5 (particles converging towards brain contour)
+        // 1400px+ => targetRatio = 1.0 (fully formed human brain with glowing neural synapses)
+        // Scrolling BACK UP smoothly reverses targetRatio back to 0.0, disassembling the brain!
+        const assembleDist = Math.min(window.innerHeight * 1.5, 1400);
+        const rawRatio = currentScroll / assembleDist;
+        targetRatio = Math.min(1.0, Math.max(0.0, rawRatio));
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -620,4 +621,3 @@ function toggleWorkshops() {
         ? '<i class="fas fa-chevron-down" id="cert-toggle-icon"></i> Show 2 more'
         : '<i class="fas fa-chevron-up" id="cert-toggle-icon"></i> Show less';
 }
->>>>>>> origin/main
