@@ -270,12 +270,27 @@ function initBirdCanvas() {
         });
     }
 
+    const rainDrops = Array.from({ length: isMobile ? 150 : 260 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        length: Math.random() * 22 + 14,
+        speed: Math.random() * 7 + 6,
+        sway: Math.random() * 1.8 + 0.9,
+        opacity: Math.random() * 0.35 + 0.16
+    }));
+
     // Scroll state & smoothing ratio
     let targetRatio = 0;  // 0 = scattered ambient particles, 1 = fully assembled human brain
     let currentRatio = 0; // Lerped value for smooth 60fps assembly & dissolution
+    let lastScrollY = window.scrollY;
+    let targetRainIntensity = 0.08;
+    let currentRainIntensity = 0.08;
 
     function onScroll() {
         const currentScroll = window.scrollY;
+        const delta = currentScroll - lastScrollY;
+        lastScrollY = currentScroll;
+
         // As user scrolls down from hero (0px) into Projects & Case Studies (~1400px):
         // 0px => targetRatio = 0.0 (particles scattered across screen)
         // 700px => targetRatio = 0.5 (particles converging towards brain contour)
@@ -284,6 +299,10 @@ function initBirdCanvas() {
         const assembleDist = Math.min(window.innerHeight * 1.5, 1400);
         const rawRatio = currentScroll / assembleDist;
         targetRatio = Math.min(1.0, Math.max(0.0, rawRatio));
+
+        const directionBoost = delta > 0 ? 0.7 : delta < 0 ? 0.25 : 0;
+        const scrollProgress = Math.min(1, currentScroll / (window.innerHeight * 1.5));
+        targetRainIntensity = Math.min(1, 0.2 + scrollProgress * 0.7 + directionBoost);
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -296,6 +315,7 @@ function initBirdCanvas() {
 
         // Smoothly interpolate current ratio towards target ratio (lerp)
         currentRatio += (targetRatio - currentRatio) * 0.06;
+        currentRainIntensity += (targetRainIntensity - currentRainIntensity) * 0.06;
 
         const time = Date.now() * 0.0015;
 
@@ -332,7 +352,30 @@ function initBirdCanvas() {
             p.y += (targetPixelY - p.y) * 0.12;
         });
 
-        // 2. Draw Synaptic Neural Connections
+        // 2. Draw rain streaks, intensified by scroll motion
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = `rgba(173, 216, 255, ${0.2 + currentRainIntensity * 0.4})`;
+        ctx.lineWidth = 1.1 + currentRainIntensity * 0.5;
+        rainDrops.forEach(drop => {
+            drop.y += drop.speed * (0.95 + currentRainIntensity * 1.3);
+            drop.x += Math.sin(time * 0.95 + drop.y * 0.01) * drop.sway * (0.28 + currentRainIntensity * 0.7);
+
+            if (drop.y > height + 20) {
+                drop.y = -20;
+                drop.x = Math.random() * width;
+            }
+            if (drop.x < -20) drop.x = width + 20;
+            if (drop.x > width + 20) drop.x = -20;
+
+            ctx.beginPath();
+            ctx.moveTo(drop.x, drop.y);
+            ctx.lineTo(drop.x - drop.sway * 1.2, drop.y + drop.length);
+            ctx.stroke();
+        });
+        ctx.restore();
+
+        // 3. Draw Synaptic Neural Connections
         const connectThreshold = maxConnectDist * (0.35 + 0.65 * currentRatio);
         ctx.lineWidth = 0.8;
 
@@ -355,7 +398,7 @@ function initBirdCanvas() {
             }
         }
 
-        // 3. Draw Brain Particles & Glow Pulses
+        // 4. Draw Brain Particles & Glow Pulses
         particles.forEach(p => {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
