@@ -3,6 +3,7 @@
 // ============================
 const typingText = document.querySelector(".typing");
 const words = ["an AI/ML Engineer", "a Data Scientist", "a Full-Stack Developer", "a Hackathon Winner", "a Problem Solver"];
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let wordIndex = 0;
 let charIndex = 0;
@@ -10,6 +11,11 @@ let isDeleting = false;
 
 function type() {
     if (!typingText) return;
+
+    if (prefersReducedMotion) {
+        typingText.textContent = words[0];
+        return;
+    }
     
     const currentWord = words[wordIndex];
     if (isDeleting) {
@@ -22,13 +28,13 @@ function type() {
 
     if (!isDeleting && charIndex === currentWord.length) {
         isDeleting = true;
-        setTimeout(type, 2500);
+        setTimeout(type, 2200);
     } else if (isDeleting && charIndex === 0) {
         isDeleting = false;
         wordIndex = (wordIndex + 1) % words.length;
-        setTimeout(type, 400);
+        setTimeout(type, 350);
     } else {
-        setTimeout(type, isDeleting ? 40 : 80);
+        setTimeout(type, isDeleting ? 35 : 75);
     }
 }
 
@@ -38,15 +44,15 @@ function type() {
 function initRevealObserver() {
     const observerOptions = {
         root: null,
-        rootMargin: '0px 0px -80px 0px',
-        threshold: 0.1
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.08
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-                // Don't unobserve — allows re-triggering if needed
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -67,8 +73,8 @@ function initActiveNav() {
 
     const observerOptions = {
         root: null,
-        rootMargin: '-20% 0px -70% 0px',
-        threshold: 0
+        rootMargin: '-30% 0px -50% 0px',
+        threshold: 0.15
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -95,23 +101,17 @@ function initNavbarScroll() {
     const navbar = document.getElementById('navbar');
     if (!navbar) return;
 
-    let lastScroll = 0;
     let ticking = false;
 
     window.addEventListener('scroll', () => {
         if (!ticking) {
             requestAnimationFrame(() => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-                lastScroll = window.scrollY;
+                navbar.classList.toggle('scrolled', window.scrollY > 40);
                 ticking = false;
             });
             ticking = true;
         }
-    });
+    }, { passive: true });
 }
 
 // ============================
@@ -124,20 +124,39 @@ function initMobileNav() {
 
     if (!burger || !nav) return;
 
+    let backdrop = document.querySelector('.nav-backdrop');
+    if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.className = 'nav-backdrop';
+        document.body.appendChild(backdrop);
+    }
+
+    function closeNav() {
+        nav.classList.remove('nav-active');
+        burger.classList.remove('toggle');
+        backdrop.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function openNav() {
+        nav.classList.add('nav-active');
+        burger.classList.add('toggle');
+        backdrop.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
     burger.addEventListener('click', () => {
-        nav.classList.toggle('nav-active');
-        burger.classList.toggle('toggle');
-        document.body.style.overflow = nav.classList.contains('nav-active') ? 'hidden' : '';
+        if (nav.classList.contains('nav-active')) {
+            closeNav();
+        } else {
+            openNav();
+        }
     });
 
+    backdrop.addEventListener('click', closeNav);
+
     navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (nav.classList.contains('nav-active')) {
-                nav.classList.remove('nav-active');
-                burger.classList.remove('toggle');
-                document.body.style.overflow = '';
-            }
-        });
+        link.addEventListener('click', closeNav);
     });
 }
 
@@ -199,10 +218,7 @@ function isValidEmail(email) {
 }
 
 // ============================
-// NEURAL NETWORK BRAIN CANVAS
-// ============================
-// ============================
-// DYNAMIC SCROLL-DRIVEN HUMAN BRAIN CANVAS
+// CINEMATIC SCROLL-DRIVEN BRAIN + DIRECTIONAL RAIN
 // ============================
 function initBirdCanvas() {
     const canvas = document.getElementById('bird-canvas');
@@ -210,216 +226,340 @@ function initBirdCanvas() {
     const ctx = canvas.getContext('2d');
 
     const isMobile = window.innerWidth <= 768;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let width, height;
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+    // ---- Canvas sizing ----
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    window.addEventListener('resize', function () {
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W;
+        canvas.height = H;
+    });
+
+    // ---- Mouse tracking ----
+    let mx = -9999, my = -9999;
+    if (!isMobile) {
+        window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+        window.addEventListener('mouseleave', function () { mx = my = -9999; }, { passive: true });
     }
-    window.addEventListener('resize', resize);
-    resize();
 
-    // 1. Define Anatomical Human Brain Skeleton contour points (normalized 0 to 1)
-    const brainContour = [
-        // Frontal Lobe & Top Cortex
-        {x: 0.28, y: 0.48}, {x: 0.32, y: 0.35}, {x: 0.38, y: 0.25}, {x: 0.46, y: 0.20},
-        {x: 0.55, y: 0.18}, {x: 0.65, y: 0.22}, {x: 0.74, y: 0.30}, {x: 0.80, y: 0.42},
-        // Occipital & Temporal Lobe Curves
-        {x: 0.82, y: 0.55}, {x: 0.78, y: 0.68}, {x: 0.70, y: 0.76}, {x: 0.60, y: 0.72},
-        {x: 0.52, y: 0.65}, {x: 0.44, y: 0.70}, {x: 0.36, y: 0.68}, {x: 0.28, y: 0.60},
-        // Cerebellum & Brain Stem details
-        {x: 0.68, y: 0.78}, {x: 0.64, y: 0.88}, {x: 0.58, y: 0.88}, {x: 0.56, y: 0.76},
-        // Inner Cortex Sulci / Neural folds
-        {x: 0.42, y: 0.32}, {x: 0.50, y: 0.30}, {x: 0.60, y: 0.32}, {x: 0.68, y: 0.40},
-        {x: 0.36, y: 0.44}, {x: 0.48, y: 0.42}, {x: 0.58, y: 0.45}, {x: 0.72, y: 0.48},
-        {x: 0.40, y: 0.56}, {x: 0.52, y: 0.55}, {x: 0.64, y: 0.58}, {x: 0.48, y: 0.62}
+    // ---- Color palette ----
+    var colors = [
+        [0, 242, 254],    // Electric cyan
+        [79, 172, 254],   // Bright blue
+        [138, 100, 255],  // Purple
+        [161, 140, 209],  // Soft lavender
+        [16, 185, 129],   // Emerald
+        [220, 230, 255],  // White-blue highlight
     ];
 
-    // Generate smooth dense brain node positions around segments
-    const nodeCount = isMobile ? 120 : 260;
-    const palette = [
-        [0, 242, 254],    // Cyan
-        [79, 172, 254],   // Bright Blue
-        [161, 140, 209],  // Purple
-        [245, 158, 11],   // Amber Gold
-        [16, 185, 129]    // Emerald
+    // ---- Detailed brain skeleton (side-view, normalized 0-1) ----
+    // ~100 points covering outer cortex, sulci, internal structures,
+    // cerebellum, and brain stem for a recognizable brain shape
+    var brainPts = [
+        // --- Outer cortex contour (frontal -> parietal -> occipital) ---
+        {x:0.15,y:0.58},{x:0.12,y:0.52},{x:0.10,y:0.45},{x:0.10,y:0.38},
+        {x:0.12,y:0.30},{x:0.16,y:0.24},{x:0.20,y:0.19},{x:0.26,y:0.15},
+        {x:0.32,y:0.12},{x:0.38,y:0.10},{x:0.44,y:0.09},{x:0.50,y:0.08},
+        {x:0.56,y:0.09},{x:0.62,y:0.12},{x:0.67,y:0.16},
+        {x:0.72,y:0.22},{x:0.76,y:0.28},{x:0.79,y:0.35},{x:0.80,y:0.42},
+        {x:0.79,y:0.49},{x:0.76,y:0.54},
+        // --- Cerebellum ---
+        {x:0.78,y:0.59},{x:0.80,y:0.64},{x:0.80,y:0.70},{x:0.77,y:0.75},
+        {x:0.72,y:0.78},{x:0.66,y:0.79},{x:0.61,y:0.76},
+        // --- Brain stem ---
+        {x:0.58,y:0.80},{x:0.56,y:0.86},{x:0.54,y:0.91},{x:0.52,y:0.93},
+        {x:0.50,y:0.91},{x:0.49,y:0.86},
+        // --- Temporal lobe (bottom contour) ---
+        {x:0.47,y:0.78},{x:0.44,y:0.73},{x:0.40,y:0.69},{x:0.35,y:0.66},
+        {x:0.28,y:0.64},{x:0.22,y:0.62},{x:0.17,y:0.60},
+        // --- Lateral sulcus (Sylvian fissure) ---
+        {x:0.22,y:0.50},{x:0.28,y:0.46},{x:0.34,y:0.43},{x:0.40,y:0.41},
+        {x:0.46,y:0.40},{x:0.52,y:0.39},
+        // --- Central sulcus ---
+        {x:0.43,y:0.12},{x:0.42,y:0.19},{x:0.40,y:0.26},{x:0.38,y:0.33},
+        {x:0.36,y:0.39},
+        // --- Superior frontal sulcus ---
+        {x:0.20,y:0.23},{x:0.25,y:0.21},{x:0.30,y:0.18},{x:0.35,y:0.16},
+        // --- Inferior frontal gyrus ---
+        {x:0.16,y:0.36},{x:0.20,y:0.34},{x:0.24,y:0.31},{x:0.28,y:0.28},
+        // --- Middle frontal ---
+        {x:0.18,y:0.43},{x:0.23,y:0.39},{x:0.28,y:0.36},
+        // --- Postcentral gyrus ---
+        {x:0.48,y:0.14},{x:0.50,y:0.21},{x:0.52,y:0.27},
+        // --- Parietal internal ---
+        {x:0.55,y:0.17},{x:0.58,y:0.23},{x:0.62,y:0.29},{x:0.66,y:0.36},
+        // --- Occipital internal ---
+        {x:0.72,y:0.36},{x:0.74,y:0.43},{x:0.73,y:0.49},
+        // --- Temporal gyri ---
+        {x:0.25,y:0.56},{x:0.32,y:0.59},{x:0.38,y:0.61},{x:0.44,y:0.63},
+        {x:0.50,y:0.65},
+        // --- Corpus callosum (internal arc) ---
+        {x:0.30,y:0.43},{x:0.36,y:0.38},{x:0.42,y:0.36},{x:0.48,y:0.35},
+        {x:0.54,y:0.37},{x:0.60,y:0.41},{x:0.65,y:0.46},
+        // --- Internal fill (frontal) ---
+        {x:0.20,y:0.29},{x:0.26,y:0.26},{x:0.22,y:0.41},{x:0.30,y:0.33},
+        {x:0.14,y:0.48},{x:0.18,y:0.32},{x:0.24,y:0.38},
+        // --- Internal fill (central) ---
+        {x:0.38,y:0.46},{x:0.42,y:0.51},{x:0.48,y:0.49},{x:0.52,y:0.46},
+        {x:0.56,y:0.51},{x:0.60,y:0.56},{x:0.45,y:0.44},{x:0.50,y:0.42},
+        // --- Internal fill (posterior) ---
+        {x:0.64,y:0.43},{x:0.68,y:0.49},{x:0.70,y:0.56},{x:0.74,y:0.52},
+        {x:0.69,y:0.38},{x:0.76,y:0.46},
+        // --- Cerebellum folia ---
+        {x:0.64,y:0.71},{x:0.68,y:0.73},{x:0.72,y:0.71},{x:0.74,y:0.68},
+        {x:0.70,y:0.67},{x:0.66,y:0.69},{x:0.75,y:0.73},{x:0.69,y:0.76},
     ];
 
-    const particles = [];
-    for (let i = 0; i < nodeCount; i++) {
-        // Target brain position (normalized 0 to 1)
-        const targetPoint = brainContour[i % brainContour.length];
-        const jitterX = (Math.random() - 0.5) * 0.08;
-        const jitterY = (Math.random() - 0.5) * 0.08;
+    // ---- Generate particles distributed across brain skeleton ----
+    var TOTAL = isMobile ? 220 : 450;
+    var particles = [];
+
+    for (var i = 0; i < TOTAL; i++) {
+        var bp = brainPts[i % brainPts.length];
+        var jx = (Math.random() - 0.5) * 0.07;
+        var jy = (Math.random() - 0.5) * 0.07;
+        var bx = Math.max(0.04, Math.min(0.96, bp.x + jx));
+        var by = Math.max(0.04, Math.min(0.96, bp.y + jy));
+
+        // ~15% of particles are ambient (visible at top of page)
+        var isAmbient = (i % 7 === 0);
+
+        // Staggered reveal order based on brain height (top cortex -> bottom) + random scatter
+        var revealAt = isAmbient ? 0 : (by * 0.7 + Math.random() * 0.3);
 
         particles.push({
-            // Target coordinates (Brain shape)
-            bx: targetPoint.x + jitterX,
-            by: targetPoint.y + jitterY,
-            // Initial scattered coordinates (Random screen positions)
-            sx: Math.random(),
-            sy: Math.random(),
-            // Current render position
-            x: Math.random() * (window.innerWidth || 1000),
-            y: Math.random() * (window.innerHeight || 800),
+            bx: bx, by: by,
+            sx: Math.random(), sy: Math.random(),
+            x: Math.random() * W, y: Math.random() * H,
+            isAmbient: isAmbient,
+            revealAt: revealAt,
+            revealed: isAmbient ? 1 : 0,
+            size: Math.random() * 2.2 + 1.2,
+            color: colors[Math.floor(Math.random() * colors.length)],
             seed: Math.random() * Math.PI * 2,
-            size: Math.random() * 1.8 + 1.8,
-            color: palette[Math.floor(Math.random() * palette.length)]
+            pulsePhase: Math.random() * Math.PI * 2
         });
     }
 
-    const rainDrops = Array.from({ length: isMobile ? 150 : 260 }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        length: Math.random() * 22 + 14,
-        speed: Math.random() * 7 + 6,
-        sway: Math.random() * 1.8 + 0.9,
-        opacity: Math.random() * 0.35 + 0.16
-    }));
+    // ---- Multi-layer rain system ----
+    var layerDefs = [
+        { count: isMobile ? 40 : 80,  minL:6,  maxL:14, minS:1.5, maxS:3.5, minO:0.05, maxO:0.12, w:0.4 },
+        { count: isMobile ? 30 : 60,  minL:10, maxL:20, minS:3,   maxS:6,   minO:0.08, maxO:0.20, w:0.7 },
+        { count: isMobile ? 15 : 35,  minL:16, maxL:28, minS:5,   maxS:9,   minO:0.12, maxO:0.30, w:1.0 },
+    ];
 
-    // Scroll state & smoothing ratio
-    let targetRatio = 0;  // 0 = scattered ambient particles, 1 = fully assembled human brain
-    let currentRatio = 0; // Lerped value for smooth 60fps assembly & dissolution
-    let lastScrollY = window.scrollY;
-    let targetRainIntensity = 0.08;
-    let currentRainIntensity = 0.08;
+    var rainLayers = [];
+    for (var li = 0; li < layerDefs.length; li++) {
+        var cfg = layerDefs[li];
+        var drops = [];
+        for (var di = 0; di < cfg.count; di++) {
+            drops.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                len: cfg.minL + Math.random() * (cfg.maxL - cfg.minL),
+                speed: cfg.minS + Math.random() * (cfg.maxS - cfg.minS),
+                opacity: cfg.minO + Math.random() * (cfg.maxO - cfg.minO),
+                sway: Math.random() * 1.5 + 0.5
+            });
+        }
+        rainLayers.push({ drops: drops, width: cfg.w });
+    }
+
+    // ---- Scroll state ----
+    var scrollProgress = 0;
+    var smoothProgress = 0;
+    var scrollVelocity = 0;
+    var smoothVelocity = 0;
+    var lastSY = window.scrollY;
+    var lastST = performance.now();
 
     function onScroll() {
-        const currentScroll = window.scrollY;
-        const delta = currentScroll - lastScrollY;
-        lastScrollY = currentScroll;
+        var now = performance.now();
+        var sy = window.scrollY;
+        var delta = sy - lastSY;
+        var dt = Math.max(1, now - lastST);
 
-        // As user scrolls down from hero (0px) into Projects & Case Studies (~1400px):
-        // 0px => targetRatio = 0.0 (particles scattered across screen)
-        // 700px => targetRatio = 0.5 (particles converging towards brain contour)
-        // 1400px+ => targetRatio = 1.0 (fully formed human brain with glowing neural synapses)
-        // Scrolling BACK UP smoothly reverses targetRatio back to 0.0, disassembling the brain!
-        const assembleDist = Math.min(window.innerHeight * 1.5, 1400);
-        const rawRatio = currentScroll / assembleDist;
-        targetRatio = Math.min(1.0, Math.max(0.0, rawRatio));
+        scrollVelocity = (delta / dt) * 16;
 
-        const directionBoost = delta > 0 ? 0.7 : delta < 0 ? 0.25 : 0;
-        const scrollProgress = Math.min(1, currentScroll / (window.innerHeight * 1.5));
-        targetRainIntensity = Math.min(1, 0.2 + scrollProgress * 0.7 + directionBoost);
+        var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        scrollProgress = Math.min(1, Math.max(0, sy / maxScroll));
+
+        lastSY = sy;
+        lastST = now;
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    const maxConnectDist = isMobile ? 80 : 120;
+    // ---- Connection distance ----
+    var MAX_CONN = isMobile ? 65 : 100;
 
-    function draw() {
-        ctx.clearRect(0, 0, width, height);
+    // ---- Main draw loop ----
+    function drawFrame(time, absVel) {
+        ctx.clearRect(0, 0, W, H);
 
-        // Smoothly interpolate current ratio towards target ratio (lerp)
-        currentRatio += (targetRatio - currentRatio) * 0.06;
-        currentRainIntensity += (targetRainIntensity - currentRainIntensity) * 0.06;
+        var brainW = Math.min(W * 0.62, 620);
+        var brainH = Math.min(H * 0.60, 520);
+        var brainX = (W - brainW) / 2;
+        var pulse = Math.sin(time * 1.5) * 6 * smoothProgress;
+        var brainY = (H - brainH) / 2 + pulse;
 
-        const time = Date.now() * 0.0015;
+        // Assembly ratio (morphs scattered particles into brain shape as user scrolls down)
+        var assembly = Math.min(1, smoothProgress * 1.15);
 
-        // Calculate responsive brain scale & centering offsets
-        const brainScaleX = Math.min(width * 0.75, 700);
-        const brainScaleY = Math.min(height * 0.7, 600);
-        const offsetX = (width - brainScaleX) / 2;
-        const breatheY = Math.sin(time * 0.8) * 12;
-        const offsetY = ((height - brainScaleY) / 2) + breatheY;
+        // ---- 1. Rain (behind everything) ----
+        var dir = smoothVelocity >= 0 ? 1 : -1;
+        var rainMult = 0.25 + Math.min(absVel * 0.18, 2.5);
 
-        // Update particle positions based on current assembly ratio
-        particles.forEach(p => {
-            p.seed += 0.01;
-            // Float offsets when scattered vs assembled
-            const floatAmpX = (1 - currentRatio * 0.6) * 15;
-            const floatAmpY = (1 - currentRatio * 0.6) * 15;
-            const floatX = Math.sin(time + p.seed) * floatAmpX;
-            const floatY = Math.cos(time + p.seed * 0.7) * floatAmpY;
+        for (var li = 0; li < rainLayers.length; li++) {
+            var layer = rainLayers[li];
+            ctx.lineWidth = layer.width;
+            ctx.lineCap = 'round';
 
-            // Scattered coordinates across screen
-            const scatterX = p.sx * width + floatX;
-            const scatterY = p.sy * height + floatY;
+            for (var di = 0; di < layer.drops.length; di++) {
+                var drop = layer.drops[di];
 
-            // Brain coordinates centered in viewport
-            const brainX = offsetX + p.bx * brainScaleX + floatX * 0.3;
-            const brainY = offsetY + p.by * brainScaleY + floatY * 0.3;
+                var moveY = absVel > 0.3
+                    ? dir * drop.speed * rainMult
+                    : drop.speed * 0.12;
 
-            // Interpolate between scattered position and brain target
-            const targetPixelX = (1 - currentRatio) * scatterX + currentRatio * brainX;
-            const targetPixelY = (1 - currentRatio) * scatterY + currentRatio * brainY;
+                drop.y += moveY;
 
-            // Soft position updating
-            p.x += (targetPixelX - p.x) * 0.12;
-            p.y += (targetPixelY - p.y) * 0.12;
-        });
+                var swayAmt = 0.12 + Math.min(absVel * 0.05, 0.7);
+                drop.x += Math.sin(time * 0.8 + drop.y * 0.008) * drop.sway * swayAmt;
 
-        // 2. Draw rain streaks, intensified by scroll motion
-        ctx.save();
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = `rgba(173, 216, 255, ${0.2 + currentRainIntensity * 0.4})`;
-        ctx.lineWidth = 1.1 + currentRainIntensity * 0.5;
-        rainDrops.forEach(drop => {
-            drop.y += drop.speed * (0.95 + currentRainIntensity * 1.3);
-            drop.x += Math.sin(time * 0.95 + drop.y * 0.01) * drop.sway * (0.28 + currentRainIntensity * 0.7);
+                if (dir >= 0 && drop.y > H + 40) { drop.y = -40 - Math.random() * 30; drop.x = Math.random() * W; }
+                if (dir < 0 && drop.y < -40) { drop.y = H + 40 + Math.random() * 30; drop.x = Math.random() * W; }
+                if (drop.x < -20) drop.x = W + 20;
+                if (drop.x > W + 20) drop.x = -20;
 
-            if (drop.y > height + 20) {
-                drop.y = -20;
-                drop.x = Math.random() * width;
+                var tailLen = drop.len * (0.4 + Math.min(absVel * 0.09, 1.1));
+                var alpha = drop.opacity * (0.5 + Math.min(absVel * 0.06, 0.9));
+                ctx.strokeStyle = 'rgba(160, 210, 255, ' + alpha + ')';
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x - drop.sway * 0.35, drop.y + tailLen * dir);
+                ctx.stroke();
             }
-            if (drop.x < -20) drop.x = width + 20;
-            if (drop.x > width + 20) drop.x = -20;
+        }
 
-            ctx.beginPath();
-            ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x - drop.sway * 1.2, drop.y + drop.length);
-            ctx.stroke();
-        });
-        ctx.restore();
+        // ---- 2. Update particles ----
+        for (var i = 0; i < particles.length; i++) {
+            var p = particles[i];
 
-        // 3. Draw Synaptic Neural Connections
-        const connectThreshold = maxConnectDist * (0.35 + 0.65 * currentRatio);
-        ctx.lineWidth = 0.8;
+            // Progressive reveal targets
+            var revealTarget = p.isAmbient ? 1 : 0;
+            if (!p.isAmbient && assembly > p.revealAt * 0.6) {
+                revealTarget = Math.min(1, (assembly - p.revealAt * 0.6) * 3.5);
+            }
+            p.revealed += (revealTarget - p.revealed) * 0.06;
 
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const p1 = particles[i];
-                const p2 = particles[j];
-                const dx = p1.x - p2.x;
-                const dy = p1.y - p2.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+            p.seed += 0.006;
 
-                if (dist < connectThreshold) {
-                    const alpha = (1 - dist / connectThreshold) * (0.2 + 0.4 * currentRatio);
+            // Float motion
+            var floatAmp = (1 - assembly * 0.65) * 12;
+            var fx = Math.sin(time * 1.1 + p.seed) * floatAmp;
+            var fy = Math.cos(time * 0.9 + p.seed * 0.7) * floatAmp;
+
+            // Scattered screen position vs target brain position
+            var scX = p.sx * W + fx;
+            var scY = p.sy * H + fy;
+
+            var brX = brainX + p.bx * brainW + fx * 0.15;
+            var brY = brainY + p.by * brainH + fy * 0.15;
+
+            // Interpolate position based on overall assembly progress
+            var morphT = Math.min(1, Math.max(0, assembly));
+            var tx = (1 - morphT) * scX + morphT * brX;
+            var ty = (1 - morphT) * scY + morphT * brY;
+
+            p.x += (tx - p.x) * 0.07;
+            p.y += (ty - p.y) * 0.07;
+
+            // Mouse repulsion
+            if (mx > 0) {
+                var ddx = p.x - mx, ddy = p.y - my;
+                var dd = Math.sqrt(ddx * ddx + ddy * ddy);
+                if (dd < 110) {
+                    var ff = (1 - dd / 110) * 16;
+                    var aa = Math.atan2(ddy, ddx);
+                    p.x += Math.cos(aa) * ff * 0.2;
+                    p.y += Math.sin(aa) * ff * 0.2;
+                }
+            }
+        }
+
+        // ---- 3. Neural connections ----
+        var connDist = MAX_CONN * (0.25 + 0.75 * assembly);
+        ctx.lineWidth = 0.6;
+
+        for (var i = 0; i < particles.length; i++) {
+            if (particles[i].revealed < 0.15) continue;
+            for (var j = i + 1; j < particles.length; j++) {
+                if (particles[j].revealed < 0.15) continue;
+                var a = particles[i], b = particles[j];
+                var dx = a.x - b.x, dy = a.y - b.y;
+                var d = Math.sqrt(dx * dx + dy * dy);
+                if (d < connDist) {
+                    var al = (1 - d / connDist) * 0.28 * Math.min(a.revealed, b.revealed);
+                    ctx.strokeStyle = 'rgba(' + a.color[0] + ',' + a.color[1] + ',' + a.color[2] + ',' + al + ')';
                     ctx.beginPath();
-                    ctx.moveTo(p1.x, p1.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.strokeStyle = `rgba(${p1.color[0]}, ${p1.color[1]}, ${p1.color[2]}, ${alpha})`;
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
                     ctx.stroke();
                 }
             }
         }
 
-        // 4. Draw Brain Particles & Glow Pulses
-        particles.forEach(p => {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            const particleAlpha = 0.6 + 0.4 * currentRatio;
-            ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${particleAlpha})`;
-            ctx.fill();
+        // ---- 4. Draw particles + glow ----
+        for (var i = 0; i < particles.length; i++) {
+            var p = particles[i];
+            if (p.revealed < 0.015) continue;
 
-            // Glow aura on brain nodes
-            if (!isMobile) {
-                const glowRadius = p.size * (2.2 + Math.sin(time * 2 + p.seed) * 1.2);
+            var pAlpha = 0.35 + 0.65 * p.revealed;
+            var pulseSz = 1 + Math.sin(time * 2 + p.pulsePhase) * 0.25 * p.revealed;
+            var sz = p.size * pulseSz;
+
+            // Outer glow (bloom effect)
+            if (!isMobile && p.revealed > 0.25) {
+                var glowR = sz * (2.8 + Math.sin(time * 1.8 + p.seed) * 1.0);
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, Math.max(0.1, glowRadius), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, ${0.15 * (0.4 + 0.6 * currentRatio)})`;
+                ctx.arc(p.x, p.y, Math.max(0.1, glowR), 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + p.color[0] + ',' + p.color[1] + ',' + p.color[2] + ',' + (0.06 * p.revealed) + ')';
                 ctx.fill();
             }
-        });
 
-        requestAnimationFrame(draw);
+            // Core particle
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + p.color[0] + ',' + p.color[1] + ',' + p.color[2] + ',' + pAlpha + ')';
+            ctx.fill();
+        }
     }
 
-    draw();
+    function animate() {
+        var time = Date.now() * 0.001;
+
+        // Smooth scroll progress
+        smoothProgress += (scrollProgress - smoothProgress) * 0.035;
+
+        // Smooth velocity with decay
+        smoothVelocity += (scrollVelocity - smoothVelocity) * 0.07;
+        scrollVelocity *= 0.88;
+
+        var absVel = Math.abs(smoothVelocity);
+
+        drawFrame(time, absVel);
+        requestAnimationFrame(animate);
+    }
+
+    animate();
 }
 
 // ============================
@@ -460,14 +600,14 @@ function initProjectFilters() {
 
             projectCards.forEach(card => {
                 const categories = card.getAttribute('data-category') || '';
+                const matches = filter === 'all' || categories.includes(filter);
 
-                if (filter === 'all' || categories.includes(filter)) {
-                    card.classList.remove('hidden');
-                    void card.offsetWidth;
+                card.classList.toggle('hidden', !matches);
+                if (matches) {
                     card.classList.add('fade-in');
-                    setTimeout(() => card.classList.remove('fade-in'), 500);
-                } else {
-                    card.classList.add('hidden');
+                    requestAnimationFrame(() => {
+                        card.classList.remove('fade-in');
+                    });
                 }
             });
         });

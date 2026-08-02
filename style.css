@@ -2,6 +2,8 @@
    DESIGN SYSTEM & CSS VARIABLES
    ============================ */
 :root {
+    color-scheme: dark;
+
     /* Animation timing */
     --anim-fast: 0.3s;
     --anim-base: 0.42s;
@@ -16,8 +18,8 @@
     --accent-rgb: 245, 158, 11;
     
     /* Neutral Palette */
-    --bg-dark: #050505;
-    --bg-surface: #0a0a0f;
+    --bg-dark: #050816;
+    --bg-surface: #080c1a;
     --card-bg: rgba(255, 255, 255, 0.03);
     --card-bg-hover: rgba(255, 255, 255, 0.07);
     --card-border: rgba(255, 255, 255, 0.08);
@@ -43,6 +45,28 @@
     /* Transitions */
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Theme surfaces */
+    --text-on-primary: #050505;
+    --surface-strong: #0a0a12;
+    --surface-overlay: rgba(10, 10, 15, 0.9);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+    .glass-card,
+    .glass-card-secondary,
+    .navbar,
+    .btn-secondary,
+    .filter-btn,
+    .project-image-content,
+    .preview-overlay-content span,
+    .social-icons a {
+        background: var(--surface-overlay);
+    }
+
+    .navbar {
+        background: rgba(5, 5, 5, 0.92);
+    }
 }
 
 /* ============================
@@ -261,12 +285,26 @@ h1, h2, h3, h4, .logo {
     background: rgba(255, 255, 255, 0.015);
     border-top: 1px solid rgba(255, 255, 255, 0.03);
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    z-index: -1;
+    z-index: 0;
+    pointer-events: none;
 }
 
 /* ============================
    GLASS CARD
    ============================ */
+.glass-card,
+.glass-card-secondary,
+.btn,
+.social-icons a,
+.filter-btn,
+.project-card,
+.whatsapp-float,
+.navbar,
+.hero::before,
+.hero::after {
+    will-change: transform, opacity;
+}
+
 .glass-card {
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(20px);
@@ -347,29 +385,31 @@ h1, h2, h3, h4, .logo {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 0;
-    height: 0;
+    width: 300px;
+    height: 300px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    transform: translate(-50%, -50%);
-    transition: width 0.7s ease, height 0.7s ease;
+    transform: translate(-50%, -50%) scale(0.1);
+    opacity: 0;
+    transition: transform 0.45s var(--ease-out), opacity 0.45s ease;
+    pointer-events: none;
 }
 
 .btn:hover::after {
-    width: 300px;
-    height: 300px;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
 }
 
 .btn-primary {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: #050505;
+    color: var(--text-on-primary);
     box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(var(--primary-rgb), 0.5);
-    color: #050505;
+    color: var(--text-on-primary);
 }
 
 .btn-secondary {
@@ -398,7 +438,7 @@ h1, h2, h3, h4, .logo {
 
 .btn-whatsapp {
     background: var(--whatsapp);
-    color: #ffffff;
+    color: var(--text-white);
     box-shadow: 0 4px 20px rgba(var(--whatsapp-rgb), 0.3);
 }
 
@@ -406,7 +446,7 @@ h1, h2, h3, h4, .logo {
     background: #20ba5a;
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(var(--whatsapp-rgb), 0.5);
-    color: #ffffff;
+    color: var(--text-white);
 }
 
 .btn-full {
@@ -423,7 +463,7 @@ h1, h2, h3, h4, .logo {
     width: 60px;
     height: 60px;
     background: var(--whatsapp);
-    color: #ffffff;
+    color: var(--text-white);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -437,12 +477,13 @@ h1, h2, h3, h4, .logo {
 .whatsapp-float:hover {
     transform: scale(1.1);
     box-shadow: 0 10px 35px rgba(var(--whatsapp-rgb), 0.6);
-    color: #ffffff;
+    color: var(--text-white);
 }
 
 .whatsapp-tooltip {
     position: absolute;
     right: 70px;
+    top: 50%;
     background: rgba(10, 10, 15, 0.9);
     color: var(--text-white);
     padding: 6px 14px;
@@ -452,7 +493,8 @@ h1, h2, h3, h4, .logo {
     white-space: nowrap;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transform: translateY(-50%) translateX(8px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
     border: 1px solid var(--card-border);
     pointer-events: none;
 }
@@ -460,7 +502,7 @@ h1, h2, h3, h4, .logo {
 .whatsapp-float:hover .whatsapp-tooltip {
     opacity: 1;
     visibility: visible;
-    right: 75px;
+    transform: translateY(-50%) translateX(0);
 }
 
 /* ============================
@@ -525,13 +567,14 @@ h1, h2, h3, h4, .logo {
 .nav-link::after {
     content: '';
     position: absolute;
-    width: 0;
+    width: 60%;
     height: 2px;
     bottom: 2px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
-    transition: width 0.3s var(--ease-out);
+    transition: transform 0.3s var(--ease-out);
     border-radius: 2px;
 }
 
@@ -542,7 +585,7 @@ h1, h2, h3, h4, .logo {
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 60%;
+    transform: translateX(-50%) scaleX(1);
 }
 
 .burger {
@@ -660,16 +703,27 @@ h1, h2, h3, h4, .logo {
 }
 
 .typing-container {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.25em;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    vertical-align: bottom;
 }
 
 .cursor {
-    color: var(--primary);
-    -webkit-text-fill-color: var(--primary);
-    animation: blink 1s step-end infinite;
+    display: inline-block;
+    width: 3px;
+    height: 1.1em;
+    background-color: var(--primary);
+    -webkit-text-fill-color: initial;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 0.9s step-end infinite;
+    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.8);
+    border-radius: 2px;
 }
 
 @keyframes blink {
@@ -790,6 +844,7 @@ section {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+        will-change: auto !important;
     }
 
     .reveal {
@@ -917,7 +972,7 @@ section + section::before {
     left: 16px;
     padding: 6px 14px;
     background: rgba(var(--accent-rgb), 0.92);
-    color: #000;
+    color: var(--surface-strong);
     border-radius: 8px;
     font-size: 0.78rem;
     font-weight: 700;
@@ -962,7 +1017,7 @@ section + section::before {
 .filter-btn.active {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     border-color: transparent;
-    color: #000;
+    color: var(--surface-strong);
     font-weight: 700;
     box-shadow: 0 4px 18px rgba(var(--primary-rgb), 0.35);
 }
@@ -2238,16 +2293,27 @@ footer {
 }
 
 
+@keyframes cardFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 /* Staggered delays for cards */
 .reveal[data-delay="0"] { transition-delay: 0ms; }
-.reveal[data-delay="1"] { transition-delay: 100ms; }
-.reveal[data-delay="2"] { transition-delay: 200ms; }
-.reveal[data-delay="3"] { transition-delay: 300ms; }
-.reveal[data-delay="4"] { transition-delay: 400ms; }
-.reveal[data-delay="5"] { transition-delay: 500ms; }
-.reveal[data-delay="6"] { transition-delay: 600ms; }
-.reveal[data-delay="7"] { transition-delay: 700ms; }
-.reveal[data-delay="8"] { transition-delay: 800ms; }
+.reveal[data-delay="1"] { transition-delay: 60ms; }
+.reveal[data-delay="2"] { transition-delay: 120ms; }
+.reveal[data-delay="3"] { transition-delay: 180ms; }
+.reveal[data-delay="4"] { transition-delay: 240ms; }
+.reveal[data-delay="5"] { transition-delay: 300ms; }
+.reveal[data-delay="6"] { transition-delay: 360ms; }
+.reveal[data-delay="7"] { transition-delay: 420ms; }
+.reveal[data-delay="8"] { transition-delay: 480ms; }
 
 /* ============================
    RESPONSIVE: LARGE TABLET
@@ -2341,6 +2407,23 @@ footer {
     
     .nav-links.nav-active {
         right: 0;
+    }
+
+    .nav-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 998;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+    }
+
+    .nav-backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
     }
     
     .nav-link {
